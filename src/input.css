@@ -2,9 +2,5 @@
 @tailwind components;
 @tailwind utilities;
 
-@layer utilities {
-    .bordes {
-        border:1px dashed rgb(100, 100, 100);
-        
-    }
-}
+@plugin "flowbite/plugin";
+@source "../node_modules/flowbite";
