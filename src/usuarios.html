@@ -67,7 +67,7 @@
                 <ul
                     class="flex flex-col p-4 mt-4 font-medium border border-gray-100 rounded-lg md:p-0 bg-gray-50 md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0 md:bg-white dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700">
                     <li>
-                        <a href="#"
+                        <a href="index.html"
                             class="block px-3 py-2 text-white bg-blue-700 rounded-sm md:bg-transparent md:text-blue-700 md:p-0 md:dark:text-blue-500"
                             aria-current="page">Horario</a>
                     </li>
@@ -100,14 +100,14 @@
             </div>
 
             <!-- Modal toggle -->
-            <button data-modal-target="authentication-modal" data-modal-toggle="authentication-modal"
+            <button data-modal-target="crud-modal" data-modal-toggle="crud-modal"
                 class="block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                 type="button">
                 Nuevo usuario
             </button>
         </div>
         <div class="relative mt-10 overflow-x-auto shadow-md sm:rounded-lg">
-            <table class="w-full text-sm text-left text-gray-500 rtl:text-right dark:text-gray-400">
+            <table id="tablaUsuarios" class="w-full text-sm text-left text-gray-500 rtl:text-right dark:text-gray-400">
                 <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                     <tr>
                         <th scope="col" class="px-6 py-3">
@@ -254,8 +254,9 @@
     </footer>
 
 
+
     <!-- Main modal -->
-    <div id="authentication-modal" tabindex="-1" aria-hidden="true"
+    <div id="crud-modal" tabindex="-1" aria-hidden="true"
         class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
         <div class="relative w-full max-w-md max-h-full p-4">
             <!-- Modal content -->
@@ -263,12 +264,87 @@
                 <!-- Modal header -->
                 <div
                     class="flex items-center justify-between p-4 border-b border-gray-200 rounded-t md:p-5 dark:border-gray-600">
-                    <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
-                        Formulario de usuario
+                    <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
+                        Registrar nuevo usuario
                     </h3>
                     <button type="button"
-                        class="end-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
-                        data-modal-hide="authentication-modal">
+                        class="inline-flex items-center justify-center w-8 h-8 text-sm text-gray-400 bg-transparent rounded-lg hover:bg-gray-200 hover:text-gray-900 ms-auto dark:hover:bg-gray-600 dark:hover:text-white"
+                        data-modal-toggle="crud-modal">
+                        <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
+                            viewBox="0 0 14 14">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+                        </svg>
+                        <span class="sr-only">Close modal</span>
+                    </button>
+                </div>
+                <!-- Modal body -->
+                <form class="p-4 md:p-5" id="userForm">
+                    <div class="grid grid-cols-2 gap-4 mb-4">
+                        <div class="col-span-2 sm:col-span-1">
+                            <label for="ci" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Carnet
+                                de identidad</label>
+                            <input type="number" name="ci" id="ci"
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                                required="">
+                        </div>
+                        <div class="col-span-2 sm:col-span-1">
+                            <label for="rol"
+                                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Rol</label>
+                            <select id="rol" name="rol"
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
+                                <option selected="">Selecciona el rol</option>
+                                <option value="estudiante">Estudiante</option>
+                                <option value="docente">Docente</option>
+                            </select>
+                        </div>
+                        <div class="col-span-2">
+                            <label for="apellidos"
+                                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Apellidos</label>
+                            <input type="text" name="apellidos" id="apellidos"
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                                required="">
+                        </div>
+                        <div class="col-span-2">
+                            <label for="nombres"
+                                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nombres</label>
+                            <input type="text" name="nombres" id="nombres"
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                                required="">
+                        </div>
+
+
+                    </div>
+                    <button type="submit"
+                        class="text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                        <svg class="w-5 h-5 me-1 -ms-1" fill="currentColor" viewBox="0 0 20 20"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd"
+                                d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z"
+                                clip-rule="evenodd"></path>
+                        </svg>
+                        Registrar nuevo usuario
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!-- Modal de vista de usuario -->
+    <!-- Main modal -->
+    <div id="timeline-modal" tabindex="-1" aria-hidden="true"
+        class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+        <div class="relative w-full max-w-md max-h-full p-4">
+            <!-- Modal content -->
+            <div class="relative bg-white rounded-lg shadow-sm dark:bg-gray-700">
+                <!-- Modal header -->
+                <div
+                    class="flex items-center justify-between p-4 border-b border-gray-200 rounded-t md:p-5 dark:border-gray-600">
+                    <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
+                        Changelog
+                    </h3>
+                    <button type="button"
+                        class="inline-flex items-center justify-center w-8 h-8 text-sm text-gray-400 bg-transparent rounded-lg hover:bg-gray-200 hover:text-gray-900 ms-auto dark:hover:bg-gray-600 dark:hover:text-white"
+                        data-modal-toggle="timeline-modal">
                         <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
                             viewBox="0 0 14 14">
                             <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -279,61 +355,353 @@
                 </div>
                 <!-- Modal body -->
                 <div class="p-4 md:p-5">
-                    <form class="space-y-4" action="#">
-                        <div>
-                            <label for="email"
-                                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Carnet de
-                                identidad</label>
-                            <input type="text" name="email" id="email"
-                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
-                                required />
-                        </div>
-                        <div>
-                            <label for="email"
-                                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Apellido
-                                Paterno</label>
-                            <input type="text" name="email" id="email"
-                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
-                                required />
-                        </div>
-                        <div>
-                            <label for="password"
-                                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Apellido
-                                Materno</label>
-                            <input type="text" name="password" id="password"
-                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
-                                required />
-                        </div>
-                        <div>
-                            <label for="password"
-                                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nombres</label>
-                            <input type="text" name="password" id="password"
-                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
-                                required />
-                        </div>
-                        <div class="flex justify-between">
-                            <div class="flex items-start">
-                                <div class="flex items-center h-5">
-                                    <input id="remember" type="checkbox" value=""
-                                        class="w-4 h-4 border border-gray-300 rounded-sm bg-gray-50 focus:ring-3 focus:ring-blue-300 dark:bg-gray-600 dark:border-gray-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800"
-                                        required />
-                                </div>
-                                <label for="remember"
-                                    class="text-sm font-medium text-gray-900 ms-2 dark:text-gray-300">Docente</label>
-                            </div>
-                        </div>
-                        <button type="submit"
-                            class="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Registrar</button>
-
-                    </form>
+                    <ol class="relative border-s border-gray-200 dark:border-gray-600 ms-3.5 mb-4 md:mb-5">
+                        <li class="mb-10 ms-8">
+                            <span
+                                class="absolute flex items-center justify-center w-6 h-6 bg-gray-100 rounded-full -start-3.5 ring-8 ring-white dark:ring-gray-700 dark:bg-gray-600">
+                                <svg class="w-2.5 h-2.5 text-gray-500 dark:text-gray-400" aria-hidden="true"
+                                    xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+                                    <path fill="currentColor"
+                                        d="M6 1a1 1 0 0 0-2 0h2ZM4 4a1 1 0 0 0 2 0H4Zm7-3a1 1 0 1 0-2 0h2ZM9 4a1 1 0 1 0 2 0H9Zm7-3a1 1 0 1 0-2 0h2Zm-2 3a1 1 0 1 0 2 0h-2ZM1 6a1 1 0 0 0 0 2V6Zm18 2a1 1 0 1 0 0-2v2ZM5 11v-1H4v1h1Zm0 .01H4v1h1v-1Zm.01 0v1h1v-1h-1Zm0-.01h1v-1h-1v1ZM10 11v-1H9v1h1Zm0 .01H9v1h1v-1Zm.01 0v1h1v-1h-1Zm0-.01h1v-1h-1v1ZM10 15v-1H9v1h1Zm0 .01H9v1h1v-1Zm.01 0v1h1v-1h-1Zm0-.01h1v-1h-1v1ZM15 15v-1h-1v1h1Zm0 .01h-1v1h1v-1Zm.01 0v1h1v-1h-1Zm0-.01h1v-1h-1v1ZM15 11v-1h-1v1h1Zm0 .01h-1v1h1v-1Zm.01 0v1h1v-1h-1Zm0-.01h1v-1h-1v1ZM5 15v-1H4v1h1Zm0 .01H4v1h1v-1Zm.01 0v1h1v-1h-1Zm0-.01h1v-1h-1v1ZM2 4h16V2H2v2Zm16 0h2a2 2 0 0 0-2-2v2Zm0 0v14h2V4h-2Zm0 14v2a2 2 0 0 0 2-2h-2Zm0 0H2v2h16v-2ZM2 18H0a2 2 0 0 0 2 2v-2Zm0 0V4H0v14h2ZM2 4V2a2 2 0 0 0-2 2h2Zm2-3v3h2V1H4Zm5 0v3h2V1H9Zm5 0v3h2V1h-2ZM1 8h18V6H1v2Zm3 3v.01h2V11H4Zm1 1.01h.01v-2H5v2Zm1.01-1V11h-2v.01h2Zm-1-1.01H5v2h.01v-2ZM9 11v.01h2V11H9Zm1 1.01h.01v-2H10v2Zm1.01-1V11h-2v.01h2Zm-1-1.01H10v2h.01v-2ZM9 15v.01h2V15H9Zm1 1.01h.01v-2H10v2Zm1.01-1V15h-2v.01h2Zm-1-1.01H10v2h.01v-2ZM14 15v.01h2V15h-2Zm1 1.01h.01v-2H15v2Zm1.01-1V15h-2v.01h2Zm-1-1.01H15v2h.01v-2ZM14 11v.01h2V11h-2Zm1 1.01h.01v-2H15v2Zm1.01-1V11h-2v.01h2Zm-1-1.01H15v2h.01v-2ZM4 15v.01h2V15H4Zm1 1.01h.01v-2H5v2Zm1.01-1V15h-2v.01h2Zm-1-1.01H5v2h.01v-2Z" />
+                                </svg>
+                            </span>
+                            <h3 class="flex items-start mb-1 text-lg font-semibold text-gray-900 dark:text-white">
+                                Flowbite
+                                Application UI v2.0.0 <span
+                                    class="bg-blue-100 text-blue-800 text-sm font-medium mr-2 px-2.5 py-0.5 rounded-sm dark:bg-blue-900 dark:text-blue-300 ms-3">Latest</span>
+                            </h3>
+                            <time
+                                class="block mb-3 text-sm font-normal leading-none text-gray-500 dark:text-gray-400">Released
+                                on Nov 10th, 2023</time>
+                            <button type="button"
+                                class="inline-flex items-center px-3 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg focus:outline-none hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">
+                                <svg class="w-3 h-3 me-1.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                                    fill="currentColor" viewBox="0 0 20 20">
+                                    <path
+                                        d="M14.707 7.793a1 1 0 0 0-1.414 0L11 10.086V1.5a1 1 0 0 0-2 0v8.586L6.707 7.793a1 1 0 1 0-1.414 1.414l4 4a1 1 0 0 0 1.416 0l4-4a1 1 0 0 0-.002-1.414Z" />
+                                    <path
+                                        d="M18 12h-2.55l-2.975 2.975a3.5 3.5 0 0 1-4.95 0L4.55 12H2a2 2 0 0 0-2 2v4a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-4a2 2 0 0 0-2-2Zm-3 5a1 1 0 1 1 0-2 1 1 0 0 1 0 2Z" />
+                                </svg>
+                                Download
+                            </button>
+                        </li>
+                        <li class="mb-10 ms-8">
+                            <span
+                                class="absolute flex items-center justify-center w-6 h-6 bg-gray-100 rounded-full -start-3.5 ring-8 ring-white dark:ring-gray-700 dark:bg-gray-600">
+                                <svg class="w-2.5 h-2.5 text-gray-500 dark:text-gray-400" aria-hidden="true"
+                                    xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+                                    <path fill="currentColor"
+                                        d="M6 1a1 1 0 0 0-2 0h2ZM4 4a1 1 0 0 0 2 0H4Zm7-3a1 1 0 1 0-2 0h2ZM9 4a1 1 0 1 0 2 0H9Zm7-3a1 1 0 1 0-2 0h2Zm-2 3a1 1 0 1 0 2 0h-2ZM1 6a1 1 0 0 0 0 2V6Zm18 2a1 1 0 1 0 0-2v2ZM5 11v-1H4v1h1Zm0 .01H4v1h1v-1Zm.01 0v1h1v-1h-1Zm0-.01h1v-1h-1v1ZM10 11v-1H9v1h1Zm0 .01H9v1h1v-1Zm.01 0v1h1v-1h-1Zm0-.01h1v-1h-1v1ZM10 15v-1H9v1h1Zm0 .01H9v1h1v-1Zm.01 0v1h1v-1h-1Zm0-.01h1v-1h-1v1ZM15 15v-1h-1v1h1Zm0 .01h-1v1h1v-1Zm.01 0v1h1v-1h-1Zm0-.01h1v-1h-1v1ZM15 11v-1h-1v1h1Zm0 .01h-1v1h1v-1Zm.01 0v1h1v-1h-1Zm0-.01h1v-1h-1v1ZM5 15v-1H4v1h1Zm0 .01H4v1h1v-1Zm.01 0v1h1v-1h-1Zm0-.01h1v-1h-1v1ZM2 4h16V2H2v2Zm16 0h2a2 2 0 0 0-2-2v2Zm0 0v14h2V4h-2Zm0 14v2a2 2 0 0 0 2-2h-2Zm0 0H2v2h16v-2ZM2 18H0a2 2 0 0 0 2 2v-2Zm0 0V4H0v14h2ZM2 4V2a2 2 0 0 0-2 2h2Zm2-3v3h2V1H4Zm5 0v3h2V1H9Zm5 0v3h2V1h-2ZM1 8h18V6H1v2Zm3 3v.01h2V11H4Zm1 1.01h.01v-2H5v2Zm1.01-1V11h-2v.01h2Zm-1-1.01H5v2h.01v-2ZM9 11v.01h2V11H9Zm1 1.01h.01v-2H10v2Zm1.01-1V11h-2v.01h2Zm-1-1.01H10v2h.01v-2ZM9 15v.01h2V15H9Zm1 1.01h.01v-2H10v2Zm1.01-1V15h-2v.01h2Zm-1-1.01H10v2h.01v-2ZM14 15v.01h2V15h-2Zm1 1.01h.01v-2H15v2Zm1.01-1V15h-2v.01h2Zm-1-1.01H15v2h.01v-2ZM14 11v.01h2V11h-2Zm1 1.01h.01v-2H15v2Zm1.01-1V11h-2v.01h2Zm-1-1.01H15v2h.01v-2ZM4 15v.01h2V15H4Zm1 1.01h.01v-2H5v2Zm1.01-1V15h-2v.01h2Zm-1-1.01H5v2h.01v-2Z" />
+                                </svg>
+                            </span>
+                            <h3 class="mb-1 text-lg font-semibold text-gray-900 dark:text-white">Flowbite Figma v2.8.0
+                            </h3>
+                            <time
+                                class="block mb-3 text-sm font-normal leading-none text-gray-500 dark:text-gray-400">Released
+                                on Oct 7th, 2023</time>
+                            <button type="button"
+                                class="inline-flex items-center px-3 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg focus:outline-none hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">
+                                <svg class="w-3 h-3 me-1.5" aria-hidden="true" viewBox="0 0 30 45" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path
+                                        d="M7.50012 45C11.6401 45 15.0002 41.6399 15.0002 37.4999V29.9999H7.50012C3.36009 29.9999 0 33.3599 0 37.4999C0 41.6399 3.36009 45 7.50012 45Z"
+                                        fill="#0ACF83" />
+                                    <path
+                                        d="M0 22.5C0 18.36 3.36009 14.9999 7.50012 14.9999H15.0002V29.9999H7.50012C3.36009 30.0001 0 26.64 0 22.5Z"
+                                        fill="#A259FF" />
+                                    <path
+                                        d="M0 7.50006C0 3.36006 3.36009 0 7.50012 0H15.0002V14.9999H7.50012C3.36009 14.9999 0 11.6401 0 7.50006Z"
+                                        fill="#F24E1E" />
+                                    <path
+                                        d="M15.0002 0H22.4999C26.6399 0 30 3.36006 30 7.50006C30 11.6401 26.6399 14.9999 22.4999 14.9999L15.0002 14.9999V0Z"
+                                        fill="#FF7262" />
+                                    <path
+                                        d="M30 22.5C30 26.64 26.6399 30 22.4999 30C18.3599 30 14.9998 26.64 14.9998 22.5C14.9998 18.36 18.3599 14.9999 22.4999 14.9999C26.6399 14.9999 30 18.36 30 22.5Z"
+                                        fill="#1ABCFE" />
+                                </svg>
+                                Duplicate in Figma
+                            </button>
+                        </li>
+                        <li class="ms-8">
+                            <span
+                                class="absolute flex items-center justify-center w-6 h-6 bg-gray-100 rounded-full -start-3.5 ring-8 ring-white dark:ring-gray-700 dark:bg-gray-600">
+                                <svg class="w-2.5 h-2.5 text-gray-500 dark:text-gray-400" aria-hidden="true"
+                                    xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+                                    <path fill="currentColor"
+                                        d="M6 1a1 1 0 0 0-2 0h2ZM4 4a1 1 0 0 0 2 0H4Zm7-3a1 1 0 1 0-2 0h2ZM9 4a1 1 0 1 0 2 0H9Zm7-3a1 1 0 1 0-2 0h2Zm-2 3a1 1 0 1 0 2 0h-2ZM1 6a1 1 0 0 0 0 2V6Zm18 2a1 1 0 1 0 0-2v2ZM5 11v-1H4v1h1Zm0 .01H4v1h1v-1Zm.01 0v1h1v-1h-1Zm0-.01h1v-1h-1v1ZM10 11v-1H9v1h1Zm0 .01H9v1h1v-1Zm.01 0v1h1v-1h-1Zm0-.01h1v-1h-1v1ZM10 15v-1H9v1h1Zm0 .01H9v1h1v-1Zm.01 0v1h1v-1h-1Zm0-.01h1v-1h-1v1ZM15 15v-1h-1v1h1Zm0 .01h-1v1h1v-1Zm.01 0v1h1v-1h-1Zm0-.01h1v-1h-1v1ZM15 11v-1h-1v1h1Zm0 .01h-1v1h1v-1Zm.01 0v1h1v-1h-1Zm0-.01h1v-1h-1v1ZM5 15v-1H4v1h1Zm0 .01H4v1h1v-1Zm.01 0v1h1v-1h-1Zm0-.01h1v-1h-1v1ZM2 4h16V2H2v2Zm16 0h2a2 2 0 0 0-2-2v2Zm0 0v14h2V4h-2Zm0 14v2a2 2 0 0 0 2-2h-2Zm0 0H2v2h16v-2ZM2 18H0a2 2 0 0 0 2 2v-2Zm0 0V4H0v14h2ZM2 4V2a2 2 0 0 0-2 2h2Zm2-3v3h2V1H4Zm5 0v3h2V1H9Zm5 0v3h2V1h-2ZM1 8h18V6H1v2Zm3 3v.01h2V11H4Zm1 1.01h.01v-2H5v2Zm1.01-1V11h-2v.01h2Zm-1-1.01H5v2h.01v-2ZM9 11v.01h2V11H9Zm1 1.01h.01v-2H10v2Zm1.01-1V11h-2v.01h2Zm-1-1.01H10v2h.01v-2ZM9 15v.01h2V15H9Zm1 1.01h.01v-2H10v2Zm1.01-1V15h-2v.01h2Zm-1-1.01H10v2h.01v-2ZM14 15v.01h2V15h-2Zm1 1.01h.01v-2H15v2Zm1.01-1V15h-2v.01h2Zm-1-1.01H15v2h.01v-2ZM14 11v.01h2V11h-2Zm1 1.01h.01v-2H15v2Zm1.01-1V11h-2v.01h2Zm-1-1.01H15v2h.01v-2ZM4 15v.01h2V15H4Zm1 1.01h.01v-2H5v2Zm1.01-1V15h-2v.01h2Zm-1-1.01H5v2h.01v-2Z" />
+                                </svg>
+                            </span>
+                            <h3 class="mb-1 text-lg font-semibold text-gray-900 dark:text-white">Flowbite Library v1.2.2
+                            </h3>
+                            <time
+                                class="block mb-3 text-sm font-normal leading-none text-gray-500 dark:text-gray-400">Released
+                                on December 2nd, 2021</time>
+                        </li>
+                    </ol>
+                    <button
+                        class="text-white inline-flex w-full justify-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                        My Downloads
+                    </button>
                 </div>
             </div>
         </div>
     </div>
 
 
+
     <script src="https://cdn.jsdelivr.net/npm/flowbite@3.1.1/dist/flowbite.min.js"></script>
     <script src="../node_modules/flowbite/dist/flowbite.min.js"></script>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getDatabase, ref, set, get, push, query, orderByChild, equalTo, remove } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyC_Yl50SusdST7Gqal5UBahp97Y-5iqMzE",
+            authDomain: "electroreg-40fdf.firebaseapp.com",
+            databaseURL: "https://electroreg-40fdf-default-rtdb.firebaseio.com",
+            projectId: "electroreg-40fdf",
+            storageBucket: "electroreg-40fdf.firebasestorage.app",
+            messagingSenderId: "28054683949",
+            appId: "1:28054683949:web:08fdd0d53b9e2feb3153a4"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const database = getDatabase(app);
+
+        document.addEventListener("DOMContentLoaded", () => {
+            document
+                .getElementById("userForm")
+                .addEventListener("submit", agregarUsuario);
+        });
+
+
+        //=========== FUNCION QUE SE EJECUTA ===========//
+        obtenerUsuarios();
+        //=========== FUNCION AGREGAR USUARIO ==========//
+        function agregarUsuario(event) {
+            event.preventDefault();
+
+            const ci = document.getElementById("ci").value;
+            const apellidos = document.getElementById("apellidos").value;
+            const nombres = document.getElementById("nombres").value;
+            const rol = document.getElementById("rol").value;
+
+            buscarUsuarioPorCI(ci).then((existeUsuario) => {
+                if (!existeUsuario) {
+                    // Generar un ID aleatorio y guardar en Firebase
+                    const usuariosRef = ref(database, "usuarios");
+                    const nuevoUsuarioRef = push(usuariosRef); // Crea un ID único automáticamente
+
+                    set(nuevoUsuarioRef, {
+                        ci: ci,
+                        apellidos: apellidos,
+                        nombres: nombres,
+                        rol: rol,
+                    })
+                        .then(() => {
+                            alert("Usuario agregado correctamente.");
+                            document.getElementById("userForm").reset();
+                            obtenerUsuarios();
+                        })
+                        .catch((error) => {
+                            console.error("Error al agregar usuario:", error);
+                        });
+                } else {
+                    console.log(buscarUsuarioPorCI(ci));
+                    alert("El usuario con ci ya se encuentra registrado")
+                }
+            });
+        }
+        //============ FUNCION CERRAR MODAL ============//
+        function cerrarModal() {
+            document.getElementById("crud-modal").classList.add("hidden");
+        }
+        //======== FUNCION BUSQUEDA DE USUARIO =========//
+        function buscarUsuarioPorCI(ci) {
+            const db = getDatabase();
+            const usuariosRef = ref(db, "usuarios"); // Referencia a la colección de usuarios
+
+            // Crear la consulta para buscar por CI
+            const consulta = query(usuariosRef, orderByChild("ci"), equalTo(ci)); // Buscar por "ci"
+
+            // Ejecutar la consulta
+            return get(consulta)
+                .then((snapshot) => {
+                    if (snapshot.exists()) {
+                        console.log("Usuario encontrado:", snapshot.val()); // Mostrar los datos encontrados
+                        return true; // Si se encuentra el usuario, retorna true
+                    } else {
+                        console.log("No se encontró ningún usuario con ese CI."); // Para depuración
+                        return false; // Si no se encuentra, retorna false
+                    }
+                })
+                .catch((error) => {
+                    console.error("Error al buscar el usuario:", error);
+                    return false; // Retorna false si hay un error en la consulta
+                });
+        }
+        //======= FUNCION PARA OBTENER USUARIOS ========//
+        function obtenerUsuarios() {
+            const db = getDatabase();
+            const usuariosRef = ref(db, "usuarios"); // Referencia a la colección de usuarios
+
+            // Obtener todos los usuarios
+            get(usuariosRef)
+                .then((snapshot) => {
+                    if (snapshot.exists()) {
+                        // Llamar a la función para mostrar los usuarios en la tabla
+                        mostrarUsuarios(snapshot.val());
+                    } else {
+                        console.log("No hay usuarios registrados.");
+                    }
+                })
+                .catch((error) => {
+                    console.error("Error al obtener usuarios:", error);
+                });
+        }
+        //==== FUNCION PARA MOSTRAR A LOS USUARIOS ====//
+        function mostrarUsuarios(usuarios) {
+            const tabla = document.getElementById("tablaUsuarios"); // Referencia a la tabla HTML
+            tabla.innerHTML = ""; // Limpiar la tabla antes de agregar nuevos datos
+
+            // Crear la cabecera de la tabla
+            const header = `<thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                    <tr>
+                        <th scope="col" class="px-6 py-3">
+                            Nro
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            Apellido Paterno
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            Apellido Materno
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            Nombres
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            CI
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            Rol
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            Opciones
+                        </th>
+                    </tr>
+                </thead>`;
+            tabla.innerHTML += header;
+            // Convertir los usuarios a un arreglo de objetos
+            const usuariosArray = Object.values(usuarios);
+
+            // Ordenar los usuarios por apellidos (alfabéticamente)
+            usuariosArray.sort((a, b) => {
+                if (a.apellidos.toLowerCase() < b.apellidos.toLowerCase()) {
+                    return -1;
+                }
+                if (a.apellidos.toLowerCase() > b.apellidos.toLowerCase()) {
+                    return 1;
+                }
+                return 0;
+            });
+
+            // Iterar sobre los usuarios y crear las filas de la tabla
+            let i = 1;
+            usuariosArray.forEach((usuario) => {
+                const row = `
+                    <tr
+                        class="border-b border-gray-200 odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 dark:border-gray-700">
+                        <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                            ${i}
+                        </th>
+                        <td class="px-6 py-4">
+                            ${usuario.apellidos}
+                        </td>
+                        <td class="px-6 py-4">
+                            ${usuario.apellidos}
+                        </td>
+                        <td class="px-6 py-4">
+                            ${usuario.nombres}
+                        </td>
+                        <td class="px-6 py-4">
+                            ${usuario.ci}
+                        </td>
+                        <td class="px-6 py-4">
+                            <span
+                                class="bg-yellow-100 text-yellow-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded-sm dark:bg-gray-700 dark:text-yellow-300 border border-yellow-300">${usuario.rol}</span>
+                        </td>
+                        <td class="px-6 py-4">
+                            <button type="button"
+                                class="text-blue-700 border border-blue-700 hover:bg-blue-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm p-2.5 text-center inline-flex items-center me-2 dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:focus:ring-blue-800 dark:hover:bg-blue-500 ">
+                                <i class='bx bx-edit-alt'></i>
+
+                            </button>
+                            <button type="button"
+                                class="text-red-700 border border-red-700 hover:bg-red-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm p-2.5 text-center inline-flex items-center me-2 btn-eliminar" data-ci="${usuario.ci}">
+                                <i class='bx bx-trash'></i>
+
+                            </button>
+                            <button type="button"
+                                class="text-slate-700 border border-slate-700 hover:bg-slate-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-slate-300 font-medium rounded-lg text-sm p-2.5 text-center inline-flex items-center me-2 btn-modal" data-ci="${usuario.ci}">
+                                <i class='bx bx-purchase-tag-alt'></i>
+
+                            </button>
+                        </td>
+                    </tr>`;
+                tabla.innerHTML += row;
+                i++;
+            }
+            )
+        }
+
+        function abrirModal(ci) {
+            console.log("abrir modal")
+        }
+        // Agrega el evento a un elemento contenedor (delegación de eventos) esto nos funciona para cuando la tabla es generada de forma dinamica
+        document.getElementById("tablaUsuarios").addEventListener("click", function (event) {
+            if (event.target.closest(".btn-eliminar")) {
+                const ci = event.target.closest(".btn-eliminar").dataset.ci;
+                eliminarUsuario(ci);
+            }
+            if (event.target.closest(".btn-modal")) {
+                const ci = event.target.closest(".btn-modal").dataset.ci;
+                abrirModal(ci);
+            }
+        });
+
+        // Función para eliminar un usuario de Firebase
+        function eliminarUsuario(ci) {
+            const db = getDatabase();
+            const usuariosRef = ref(db, "usuarios");
+
+            // Consulta para buscar el usuario por su CI
+            const consulta = query(usuariosRef, orderByChild("ci"), equalTo(ci));
+
+            get(consulta)
+                .then(snapshot => {
+                    if (snapshot.exists()) {
+                        const usuarioKey = Object.keys(snapshot.val())[0]; // Obtener la clave del usuario
+                        const usuarioAEliminarRef = ref(db, `usuarios/${usuarioKey}`);
+
+                        // Eliminar el usuario
+                        remove(usuarioAEliminarRef)
+                            .then(() => {
+                                console.log("✅ Usuario eliminado con éxito");
+                                alert(" ✅ Usuario eliminado correctamente.");
+                                obtenerUsuarios();
+                            })
+                            .catch(error => console.error("Error al eliminar usuario:", error));
+                    } else {
+                        console.log("Usuario no encontrado.");
+                    }
+                })
+                .catch(error => console.error("Error en la consulta:", error));
+        }
+
+
+    </script>
+
 
 </body>
 
