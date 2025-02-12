@@ -280,14 +280,14 @@
                 <form class="p-4 md:p-5">
                     <div class="grid grid-cols-2 gap-4 mb-4">
                         <div class="col-span-2 ">
-                            <input type="date" name="name" id="name" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 
+                            <input type="date" name="fecha" id="fecha" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 
                                 placeholder=" ">
                         </div>
 
-                        <hr class="mb-4 ">
+                        <hr class=" mb-4 ">
 
-                        <div class="col-span-2 ">
-                                <input type=" text" name="name" id="name" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 
+                        <div class=" col-span-2 ">
+                                <input type=" text" name="busqueda" id="busqueda" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 
                                 placeholder=" Apellidos o CI">
                         </div>
                     </div>
@@ -304,16 +304,10 @@
 
                                     </tr>
                                 </thead>
-                                <tbody>
+                                <tbody id="tablaUsuarios">
                                     <tr
                                         class="bg-white border-b border-gray-200 dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
 
-                                        <td class="px-6 py-4 text-right">
-                                            <button type="button"
-                                                class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
-                                                CHUQUIAGUILLO MARIACA FERNANDO LUIS
-                                            </button>
-                                        </td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -328,14 +322,16 @@
 
 
 
-
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.js"
+        integrity="sha512-+k1pnlgt4F1H8L7t3z95o3/KO+o78INEcXTbnoJQ/F2VqDVhWoaiVml/OEHv9HsVgxUaVW+IbiZPUJQfF/YxZw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="../node_modules/flowbite/dist/flowbite.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/flowbite@3.1.1/dist/flowbite.min.js"></script>
     <script src="../node_modules/flowbite/dist/flowbite.min.js"></script>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getDatabase, ref, set, get, push, query, orderByChild, equalTo, remove } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+        import { getDatabase, ref, set, get, push, query, orderByChild, equalTo, remove, startAt, endAt } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyC_Yl50SusdST7Gqal5UBahp97Y-5iqMzE",
@@ -353,6 +349,131 @@
 
         document.addEventListener("DOMContentLoaded", function () {
 
+            //-------------- ASIGNAR FECHAS AUTOAMICAS ------------------//
+            function setFechaActual() {
+                let hoy = new Date();
+                let fechaFormateada = hoy.toISOString().split('T')[0]; // Formato YYYY-MM-DD
+                document.getElementById('fecha').value = fechaFormateada;
+            }
+            //---------- FUNCION BUSCAR USUARIO ----------------//
+
+            const usuariosRef = ref(database, "usuarios");
+
+            // Evento de búsqueda en tiempo real
+            document.getElementById("busqueda").addEventListener("input", async function () {
+                let filtro = this.value.toUpperCase();
+
+                if (filtro === "") {
+                    mostrarResultados([]); // Si el input está vacío, limpia la tabla
+                    return;
+                }
+
+                //console.log("Buscando:", filtro); // Verificar en consola
+
+                // Hacer consultas separadas para "ci" y "apellidos"
+                const consultaCi = query(usuariosRef, orderByChild("ci"), startAt(filtro), endAt(filtro + "\uf8ff"));
+                const consultaApellidos = query(usuariosRef, orderByChild("apellidos"), startAt(filtro), endAt(filtro + "\uf8ff"));
+
+                try {
+                    const snapshotCi = await get(consultaCi); // Obtener resultados de "ci"
+                    const snapshotApellidos = await get(consultaApellidos); // Obtener resultados de "apellidos"
+
+                    let listaUsuarios = [];
+
+                    // Procesar los resultados de "ci"
+                    snapshotCi.forEach(childSnapshot => {
+                        let usuario = childSnapshot.val();
+                        listaUsuarios.push(usuario);
+                    });
+
+                    // Procesar los resultados de "apellidos"
+                    snapshotApellidos.forEach(childSnapshot => {
+                        let usuario = childSnapshot.val();
+                        listaUsuarios.push(usuario);
+                    });
+
+                    // Eliminar duplicados si es necesario (por ejemplo, un usuario puede estar en ambas búsquedas)
+                    listaUsuarios = Array.from(new Set(listaUsuarios.map(a => a.ci))).map(ci => {
+                        return listaUsuarios.find(a => a.ci === ci);
+                    });
+
+                    mostrarResultados(listaUsuarios); // Mostrar los resultados combinados
+
+                } catch (error) {
+                    console.error("Error al buscar:", error);
+                }
+            });
+
+            // Función para mostrar los resultados en la tabla
+            function mostrarResultados(lista) {
+                let tablaUsuarios = document.getElementById("tablaUsuarios");
+                tablaUsuarios.innerHTML = ""; // Limpiar la tabla antes de agregar nuevas filas
+
+                lista.forEach(usuario => {
+                    let fila = `<tr class="bg-white border-b border-gray-200 dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                        <td class="px-6 py-4 text-right">
+                            <button type="button" data-ci="${usuario.ci}" onclick="capturarAsistencia(this)" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center">
+                                ${usuario.apellidos + ' ' + usuario.nombres}
+                            </button>
+                        </td>
+                    </tr>`;
+                    tablaUsuarios.innerHTML += fila;
+                });
+
+                // Si no hay resultados, mostrar mensaje
+                if (lista.length === 0) {
+                    tablaUsuarios.innerHTML = `<tr class="bg-white border-b border-gray-200 dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"><td class="px-6 py-4 text-right" colspan="2">No se encontraron usuarios</td></tr>`;
+                }
+            }
+            //------------- REGISTRAR LA ASISTENCIA -------------//
+            window.capturarAsistencia = function (boton) {
+
+                const ci = boton.getAttribute("data-ci");
+                const fechaSeleccionada = document.getElementById("fecha").value;
+                const idHorario = sessionStorage.getItem("idHorario");
+                registrarAsistencia(ci, fechaSeleccionada, idHorario);
+            }
+            async function registrarAsistencia(ci, fecha, idHorario) {
+                const db = getDatabase();  // Obtener la base de datos
+                const asistenciaRef = ref(db, 'asistencias');  // Referencia a la colección "asistencias"
+
+                // Crear el objeto de la asistencia
+                const asistencia = {
+                    ci: ci,
+                    fecha: fecha,
+                    idMateria: idHorario,
+                };
+                const consulta = query(asistenciaRef, orderByChild("ci"), equalTo(ci));
+                const snapshot = await get(consulta);
+
+                let asistenciaExiste = false;
+
+                snapshot.forEach((childSnapshot) => {
+                    const asistencia = childSnapshot.val();
+                    if (asistencia.fecha === fecha && asistencia.idMateria === idHorario) {
+                        asistenciaExiste = true;
+                    }
+                });
+
+                if (asistenciaExiste) {
+                    alert("Ya existe una asistencia registrada para este usuario en esta fecha.");
+                } else {
+                    // Guardar la asistencia en Firebase
+                    push(asistenciaRef, asistencia)
+                        .then(() => {
+                            alert("Asistencia registrada con éxito.");
+                            document.getElementById("tablaUsuarios").innerHTML = "";
+                            document.getElementById("busqueda").value = "";
+                        })
+                        .catch((error) => {
+                            console.error("Error al registrar la asistencia:", error);
+                        });
+                }
+            }
+
+            // Llamar a la función cuando se cargue la página
+            window.onload = setFechaActual;
+
             //-------------- LISTAR FECHAS DE ASISTENCIA --------------//
 
             //-------------- FUNCION AGREGAR ASISTENCIAS ---------------//
@@ -360,7 +481,6 @@
                 const datoRecibido = sessionStorage.getItem("idHorario");
                 const fecha = new Date();
                 const fechaFormateada = fecha.toLocaleDateString("es-ES"); // Formato DD/MM/AAAA
-
 
                 const usuariosRef = ref(database, "horarios");
                 const nuevoUsuarioRef = push(usuariosRef); // Crea un ID único automáticamente
@@ -384,10 +504,11 @@
                 alert(datoRecibido + " " + fechaFormateada);
             });
 
-            //---------- FUNCION BUSCAR USUARIO ----------------//
+
 
             //---------- LISTAR USUARIOS DE LA ASISTENCIA EN FECHA ------------//
         });
+
 
 
     </script>
