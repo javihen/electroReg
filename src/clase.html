@@ -95,7 +95,7 @@
 
     <div class="p-10">
         <div class="flex flex-row justify-between">
-            <div
+            <div id="tituloNombre"
                 class="inline-flex items-center px-5 py-2.5 text-sm font-medium text-center text-white bg-green-700 rounded-lg  focus:ring-4 focus:outline-none focus:ring-green-300 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">
                 .: Materia: Sistemas de control I y laboratorio - Gestion 2025 :.
             </div>
@@ -124,7 +124,7 @@
 
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody id="tablaCuerpo">
                         <tr class="bg-white border-b border-gray-200 dark:bg-gray-800 dark:border-gray-700">
                             <td class="px-6 py-4">
                                 1
@@ -348,19 +348,26 @@
 
 
         document.addEventListener("DOMContentLoaded", function () {
+            // Llamar a la función cuando se cargue la página
 
-            //-------------- ASIGNAR FECHAS AUTOAMICAS ------------------//
+            window.onload = function () {
+                obtenerAsistencias();
+                setFechaActual();
+            }
+            //-------------- ASIGNAR FECHAS AUTOMATICAS ------------------//
             function setFechaActual() {
                 let hoy = new Date();
                 let fechaFormateada = hoy.toISOString().split('T')[0]; // Formato YYYY-MM-DD
                 document.getElementById('fecha').value = fechaFormateada;
+                document.getElementById('tituloNombre').innerHTML = ".: " + sessionStorage.getItem("nombreHorario") + " - Gestion 2025:.";
+
             }
             //---------- FUNCION BUSCAR USUARIO ----------------//
 
-            const usuariosRef = ref(database, "usuarios");
 
             // Evento de búsqueda en tiempo real
             document.getElementById("busqueda").addEventListener("input", async function () {
+                const usuariosRef = ref(database, "usuarios");
                 let filtro = this.value.toUpperCase();
 
                 if (filtro === "") {
@@ -471,11 +478,62 @@
                 }
             }
 
-            // Llamar a la función cuando se cargue la página
-            window.onload = setFechaActual;
 
             //-------------- LISTAR FECHAS DE ASISTENCIA --------------//
+            async function obtenerAsistencias() {
+                const idhorarios = sessionStorage.getItem("idHorario");  // Obtener el idhorario de sessionStorage
+                console.log(idhorarios);
+                if (!idhorarios) return;  // Si no hay idhorario, no continuamos
 
+                const dbRef = ref(database, "asistencias");  // Refiérase a la colección 'asistencia'
+                try {
+                    const snapshot = await get(dbRef);
+                    if (snapshot.exists()) {
+                        const asistencias = snapshot.val();
+                        const fechas = new Set();
+                        console.log(asistencias);
+                        // Recorremos las asistencias y agregamos las fechas únicas para ese idhorario
+                        for (const key in asistencias) {
+                            const { fecha, idMateria } = asistencias[key];
+                            console.log(`fecha: ${fecha}, idhorario: ${idMateria}`);
+                            if (idMateria === idhorarios) {
+                                fechas.add(fecha);  // Solo agregar las fechas para el idhorario correspondiente
+                            }
+                        }
+                        console.log(fechas);
+                        // Mostrar las fechas únicas en la tabla
+                        
+                        let filasHTML = '';
+                        fechas.forEach((fecha, index) => {
+                            // Creamos la fila como una cadena de texto en formato HTML
+                            const numeroFila = index + 1;
+                            filasHTML += `
+                            <tr class="bg-white border-b border-gray-200 dark:bg-gray-800 dark:border-gray-700">
+                                <td class="px-6 py-4">${numeroFila}</td>
+                                <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">${fecha}</td>
+                                <td class="px-6 py-4">
+                                    <button type="button" data-modal-target="medium-modal" data-modal-toggle="medium-modal"
+                                            class="text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-full text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700">
+                                        <i class='bx bx-show-alt'></i> Ver Asistentes
+                                    </button>
+                                    <button type="button"
+                                            class="text-white bg-green-700 hover:bg-green-800 focus:outline-none focus:ring-4 focus:ring-green-300 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">
+                                        <i class='bx bxs-download'></i> Generar Excel
+                                    </button>
+                                </td>
+                            </tr>
+                        `;
+                        });
+
+                        // Insertamos las filas generadas dentro del <tbody> con el id "tablaCuerpo"
+                        document.getElementById('tablaCuerpo').innerHTML = filasHTML;
+                    } else {
+                        console.log("No se encontraron datos");
+                    }
+                } catch (error) {
+                    console.error("Error al obtener los datos:", error);
+                }
+            }
             //-------------- FUNCION AGREGAR ASISTENCIAS ---------------//
             document.getElementById("btnAsistencia").addEventListener("click", function () {
                 const datoRecibido = sessionStorage.getItem("idHorario");
