@@ -24,7 +24,7 @@
                     id="user-menu-button" aria-expanded="false" data-dropdown-toggle="user-dropdown"
                     data-dropdown-placement="bottom">
                     <span class="sr-only">Open user menu</span>
-                    <img class="w-8 h-8 rounded-full" src="/docs/images/people/profile-picture-3.jpg" alt="user photo">
+                    <img class="w-8 h-8 rounded-full" src="#" alt="user photo">
                 </button>
                 <!-- Dropdown menu -->
                 <div class="z-50 hidden my-4 text-base list-none bg-white divide-y divide-gray-100 rounded-lg shadow-sm dark:bg-gray-700 dark:divide-gray-600"
@@ -482,7 +482,7 @@
             //-------------- LISTAR FECHAS DE ASISTENCIA --------------//
             async function obtenerAsistencias() {
                 const idhorarios = sessionStorage.getItem("idHorario");  // Obtener el idhorario de sessionStorage
-                console.log(idhorarios);
+                const nombreMateria = sessionStorage.getItem("nombreHorario");
                 if (!idhorarios) return;  // Si no hay idhorario, no continuamos
 
                 const dbRef = ref(database, "asistencias");  // Refiérase a la colección 'asistencia'
@@ -512,8 +512,8 @@
                                 <td class="px-6 py-4">${numeroFila}</td>
                                 <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">${fecha}</td>
                                 <td class="px-6 py-4">
-                                    <button type="button" data-modal-target="medium-modal" data-modal-toggle="medium-modal"
-                                            class="text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-full text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700">
+                                    <button type="button" id="btnMostrar" data-fecha="${fecha}" data-horario="${idhorarios}" data-nombre="${nombreMateria}"
+                                            class="btnMostrar text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-full text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700">
                                         <i class='bx bx-show-alt'></i> Ver Asistentes
                                     </button>
                                     <button type="button"
@@ -527,6 +527,29 @@
 
                         // Insertamos las filas generadas dentro del <tbody> con el id "tablaCuerpo"
                         document.getElementById('tablaCuerpo').innerHTML = filasHTML;
+
+                        document.addEventListener("click", function (event) {
+                        const btn = event.target.closest(".btnMostrar"); // Detecta si el clic fue en un botón válido
+
+                        if (btn) {
+                            const fecha = btn.getAttribute("data-fecha");
+                            const horario = btn.getAttribute("data-horario");
+                            const nombreMateria = btn.getAttribute("data-nombre");
+
+                            console.log("✅ Botón clickeado");
+                            console.log("📅 Fecha:", fecha);
+                            console.log("⏰ Horario:", horario);
+                            console.log("⏰ Materia:", nombreMateria);
+
+                            if (!fecha || !horario) {
+                                console.error("❌ ERROR: Los valores de fecha u horario están vacíos.");
+                                return;
+                            }
+
+                            // Redirigir con parámetros en la URL
+                            window.location.href = `detalleAsistencia.html?fecha=${encodeURIComponent(fecha)}&horario=${encodeURIComponent(horario)}&nombreMateria=${encodeURIComponent(nombreMateria)}`;
+                        }
+                    });
                     } else {
                         console.log("No se encontraron datos");
                     }
@@ -565,6 +588,15 @@
 
 
             //---------- LISTAR USUARIOS DE LA ASISTENCIA EN FECHA ------------//
+            document.addEventListener("click", function (event) {
+                if (event.target.closest(".btnMostrar")) {
+                    console.log("presionamos el boton de asistencia");
+                    const btn = event.target.closest(".btnMostrar");
+                    const fecha = btn.getAttribute("data-fecha");
+                    const horario = btn.getAttribute("data-horario");
+                    window.location.href = `detalleAsistencia.html?fecha=${encodeURIComponent(fecha)}&horario=${encodeURIComponent(horario)}`;
+                }
+            });
         });
 
 
