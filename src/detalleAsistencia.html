@@ -1,12 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="./output.css" rel="stylesheet">
+    <!-- <link href="./output.css" rel="stylesheet"> -->
+    <script src="https://cdn.tailwindcss.com"></script>
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <title>Document</title>
 </head>
+
 <body>
     <nav class="bg-white border-gray-200 dark:bg-gray-900">
         <div class="flex flex-wrap items-center justify-between max-w-screen-xl p-4 mx-auto">
@@ -92,11 +95,11 @@
         <div class="flex flex-row justify-between">
             <div id="tituloNombre"
                 class="inline-flex items-center px-5 py-2.5 text-sm font-medium text-center text-white bg-green-700 rounded-lg  focus:ring-4 focus:outline-none focus:ring-green-300 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">
-                .: Materia: Sistemas de control I y laboratorio - Gestion 2025 :.
+                .: Materia: - Gestion 2025 :.
             </div>
             <div id="fecha"
-                class="inline-flex items-center px-5 py-2.5 text-sm font-medium text-center text-white bg-green-700 rounded-lg  focus:ring-4 focus:outline-none focus:ring-green-300 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">
-                .: Materia: Sistemas de control I y laboratorio - Gestion 2025 :.
+                class="inline-flex items-center px-5 py-2.5 text-sm font-medium text-center text-white bg-pink-700 rounded-lg  focus:ring-4 focus:outline-none focus:ring-pink-300 dark:bg-pink-600 dark:hover:bg-pink-700 dark:focus:ring-pink-800">
+                Fecha
             </div>
 
             <!-- Modal toggle -->
@@ -115,7 +118,16 @@
                                 Nro.
                             </th>
                             <th scope="col" class="px-6 py-3">
-                                Fecha
+                                C.I.
+                            </th>
+                            <th scope="col" class="px-6 py-3">
+                                Apellidos
+                            </th>
+                            <th scope="col" class="px-6 py-3">
+                                Nombres
+                            </th>
+                            <th scope="col" class="px-6 py-3">
+                                Rol
                             </th>
                             <th scope="col" class="px-6 py-3">
                                 Opciones
@@ -123,29 +135,45 @@
 
                         </tr>
                     </thead>
-                    <tbody id="tablaCuerpo">
+                    <tbody id="tablaBody">
                         <tr class="bg-white border-b border-gray-200 dark:bg-gray-800 dark:border-gray-700">
                             <td class="px-6 py-4">
                                 1
                             </td>
-                            <td scope="row"
-                                class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                25/05/2025
+                            <td class="px-6 py-4">
+                                6998583
+                            </td>
+                            <td class="px-6 py-4">
+                                QUISPE PINTO
+                            </td>
+                            <td class="px-6 py-4">
+                                JAVIER HENRY
+                            </td>
+                            <td class="px-6 py-4">
+                                <span
+                                    class="bg-green-100 text-green-800 text-sm font-medium me-2 px-2.5 border-green-600 border-2 rounded dark:bg-green-900 dark:text-green-300 py-1">Estudiante</span>
                             </td>
                             <td class="px-6 py-4">
                                 <button type="button" data-modal-target="medium-modal" data-modal-toggle="medium-modal"
-                                    class="text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-full text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700"><i
-                                        class='bx bx-show-alt'></i> Ver
-                                    Asistentes</button>
-                                <button type="button"
-                                    class="text-white bg-green-700 hover:bg-green-800 focus:outline-none focus:ring-4 focus:ring-green-300 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">
-                                    <i class='bx bxs-download'></i> Generar
-                                    Excel</button>
+                                    class="text-white bg-violet-800 hover:bg-violet-900 focus:outline-none focus:ring-4 focus:ring-violet-300 font-medium rounded-full text-sm px-5 py-2.5 me-2 mb-2 ">
+                                    Ver
+                                    Prestamos</button>
+
                             </td>
 
                         </tr>
-
                     </tbody>
+                    <tr>
+                        <td colspan="4"></td>
+                        <td colspan="2" class="p-4 text-center">
+                            <button type="button" id="btnGenerarExcel"
+                                class="text-white bg-green-700 hover:bg-green-800 focus:outline-none focus:ring-4 focus:ring-green-300 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">
+                                <i class='bx bxs-download'></i> Generar archivo Excel
+                            </button>
+                        </td>
+                    </tr>
+
+
                 </table>
             </div>
 
@@ -187,6 +215,8 @@
                 Pinto</span>
         </div>
     </footer>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.1/xlsx.full.min.js"></script>
+
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
         import { getDatabase, ref, set, get, push, query, orderByChild, equalTo, remove, startAt, endAt } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
@@ -208,7 +238,7 @@
         const params = new URLSearchParams(window.location.search);
         const fecha = params.get("fecha");
         const horario = params.get("horario");
-        const nombreMateria = params.get("nombreMateria"); 
+        const nombreMateria = params.get("nombreMateria");
 
         document.getElementById('tituloNombre').innerHTML = ".: " + nombreMateria + " - Gestion 2025:.";
         document.getElementById('fecha').innerHTML = "" + formatearFecha(fecha) + " ";
@@ -217,20 +247,203 @@
         console.log("Horario:", horario);
         console.log("Materia:", nombreMateria);
 
-        function formatearFecha(fechaStr) {
-            const fecha = new Date(fechaStr); // Convertir la cadena a objeto Date
+        //generar el archivo excel 
+        document.getElementById('btnGenerarExcel').addEventListener('click', () => {
+            // Datos obtenidos de las asistencias (reemplaza esto con los datos reales que has obtenido de Firebase)
+            const fecha = params.get("fecha"); // Reemplaza con la fecha seleccionada
+            const materia = params.get("horario"); // Reemplaza con la materia seleccionada
+            const datos = obtenerAsistentesJSON(database, fecha, materia);
+            console.log(datos)
+        });
 
-            // Opciones para formatear la fecha
-            const opciones = { weekday: "long", day: "numeric", month: "long", year: "numeric" };
+        // Función para obtener json
+        async function obtenerAsistentesJSON(database, fecha, materia) {
+            try {
+                // 1️⃣ Consultar asistencias con la fecha dada
+                const asistenciasRef = ref(database, "asistencias");
+                const snapshotAsistencias = await get(asistenciasRef)
 
-            // Formatear la fecha en español
-            return fecha.toLocaleDateString("es-ES", opciones);
+                if (Object.keys(snapshotAsistencias.val()).length === 0) {
+                    console.log("❌ No hay asistencias registradas en esa fecha.");
+                    return [];
+                }
+
+                // 2️⃣ Filtrar por materia y extraer los CI de los asistentes
+                const asistentesCI = [];
+                snapshotAsistencias.forEach((asistencia) => {
+                    const materiaAux = asistencia.val().idMateria.toString();
+                    const fechaAux = asistencia.val().fecha.toString();
+                    if (materiaAux === materia && fechaAux === fecha) {
+                        asistentesCI.push(asistencia.val().ci);
+                    }
+                });
+
+                if (asistentesCI.length === 0) {
+                    console.log("❌ No hay asistencias registradas para esta materia en esa fecha.");
+                    return [];
+                }
+
+                // 3️⃣ Consultar los datos de los usuarios usando los CI obtenidos
+                const usuariosRef = ref(database, "usuarios");
+                const usuariosSnapshot = await get(usuariosRef);
+
+                if (!usuariosSnapshot.exists()) {
+                    console.log("❌ No se encontraron datos de usuarios.");
+                    return [];
+                }
+
+                // 4️⃣ Filtrar los usuarios que coinciden con los CI de asistentes
+                const listaUsuarios = [];
+                usuariosSnapshot.forEach((usuario) => {
+                    const userData = usuario.val();
+                    if (asistentesCI.includes(userData.ci)) {
+                        listaUsuarios.push(userData);
+                    }
+                });
+
+                console.log("✅ Lista de asistentes en JSON:", listaUsuarios);
+
+                // 5️⃣ Retornamos la lista de usuarios en json
+                return listaUsuarios;
+
+            } catch (error) {
+                console.error("❌ Error al obtener asistentes:", error);
+            }
         }
 
-        // Prueba con la fecha "2025-02-12"
-        const fechaFormateada = formatearFecha("2025-02-12");
-        console.log(fechaFormateada); // Output: "miércoles 12 de febrero de 2025"
+        // Función para obtener asistentes por fecha y materia
+        async function obtenerAsistentes(database, fecha, materia) {
+            try {
+                // 1️⃣ Consultar asistencias con la fecha dada
+                const asistenciasRef = ref(database, "asistencias");
+                const snapshotAsistencias = await get(asistenciasRef)
+
+                if (Object.keys(snapshotAsistencias.val()).length === 0) {
+                    console.log("❌ No hay asistencias registradas en esa fecha.");
+                    return [];
+                }
+
+                // 2️⃣ Filtrar por materia y extraer los CI de los asistentes
+                const asistentesCI = [];
+                snapshotAsistencias.forEach((asistencia) => {
+                    const materiaAux = asistencia.val().idMateria.toString();
+                    const fechaAux = asistencia.val().fecha.toString();
+                    if (materiaAux === materia && fechaAux === fecha) {
+                        asistentesCI.push(asistencia.val().ci);
+                    }
+                });
+
+                if (asistentesCI.length === 0) {
+                    console.log("❌ No hay asistencias registradas para esta materia en esa fecha.");
+                    return [];
+                }
+
+                // 3️⃣ Consultar los datos de los usuarios usando los CI obtenidos
+                const usuariosRef = ref(database, "usuarios");
+                const usuariosSnapshot = await get(usuariosRef);
+
+                if (!usuariosSnapshot.exists()) {
+                    console.log("❌ No se encontraron datos de usuarios.");
+                    return [];
+                }
+
+                // 4️⃣ Filtrar los usuarios que coinciden con los CI de asistentes
+                const listaUsuarios = [];
+                usuariosSnapshot.forEach((usuario) => {
+                    const userData = usuario.val();
+                    if (asistentesCI.includes(userData.ci)) {
+                        listaUsuarios.push(userData);
+                    }
+                });
+
+                console.log("✅ Lista de asistentes:", listaUsuarios);
+
+                // 5️⃣ Llamar la función para mostrar la tabla
+                mostrarTabla(listaUsuarios);
+                return listaUsuarios;
+
+            } catch (error) {
+                console.error("❌ Error al obtener asistentes:", error);
+            }
+        }
+
+        // Función para mostrar los datos en una tabla HTML
+        function mostrarTabla(usuarios) {
+            const tablaBody = document.getElementById("tablaBody");
+            if (!tablaBody) {
+                console.error("❌ ERROR: No se encontró el elemento con id 'tablaBody'.");
+                return;
+            }
+
+            tablaBody.innerHTML = ""; // Limpiar tabla antes de agregar nuevos datos
+
+            usuarios.forEach((usuario, index) => {
+                const fila = `
+            <tr class="bg-white border-b border-gray-200 dark:bg-gray-800 dark:border-gray-700">
+                <td class="px-6 py-4">
+                                ${index + 1}
+                            </td>
+                            <td class="px-6 py-4">
+                                ${usuario.ci}
+                            </td>
+                            <td class="px-6 py-4">
+                                ${usuario.apellidos}
+                            </td>
+                            <td class="px-6 py-4">
+                                ${usuario.nombres}
+                            </td>
+                            <td class="px-6 py-4">
+                                <span
+                                    class="bg-green-100 text-green-800 text-sm font-medium me-2 px-2.5 border-green-600 border-2 rounded dark:bg-green-900 dark:text-green-300 py-1">${usuario.rol}</span>
+                            </td>
+                            <td class="px-6 py-4">
+                                <button type="button" data-modal-target="medium-modal" data-modal-toggle="medium-modal"
+                                    class="text-white bg-violet-800 hover:bg-violet-900 focus:outline-none focus:ring-4 focus:ring-violet-300 font-medium rounded-full text-sm px-5 py-2.5 me-2 mb-2 ">
+                                    Ver
+                                    Prestamos</button>
+
+                            </td>
+            </tr>
+        `;
+                tablaBody.innerHTML += fila;
+            });
+        }
+
+        // Ejemplo de uso al cargar la página
+        document.addEventListener("DOMContentLoaded", function () {
+            const fecha = params.get("fecha"); // Reemplaza con la fecha seleccionada
+            const materia = params.get("horario"); // Reemplaza con la materia seleccionada
+            obtenerAsistentes(database, fecha, materia);
+        });
+
+
+        function formatearFecha(fechaStr) {
+            // Asegúrate de que la fecha que pasas está en formato ISO 8601: "YYYY-MM-DD"
+            const fecha = new Date(fechaStr + "T00:00:00");
+
+            if (isNaN(fecha)) {
+                console.log("🚨 Error: la fecha no es válida.");
+                return;
+            }
+
+            // Definir los nombres de los días y los meses
+            const dias = ["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"];
+            const meses = ["enero", "Febrero", "marzo", "abril", "mayo", "junio", "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"];
+
+            // Obtener el día de la semana y la fecha
+            const diaSemana = dias[fecha.getDay()];
+            const diaMes = fecha.getDate();
+            const mes = meses[fecha.getMonth()];
+            const anio = fecha.getFullYear();
+
+            // Formatear la fecha
+            const fechaFormateada = `${diaSemana} ${diaMes} de ${mes} de ${anio}`;
+            return fechaFormateada;
+        }
+
+
 
     </script>
 </body>
+
 </html>
