@@ -20,36 +20,35 @@
             </a>
             <div class="flex items-center space-x-3 md:order-2 md:space-x-0 rtl:space-x-reverse">
                 <button type="button"
-                    class="flex text-sm bg-gray-800 rounded-full md:me-0 focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600"
+                    class="flex text-sm  rounded-full md:me-0 focus:ring-4 focus:ring-gray-300 "
                     id="user-menu-button" aria-expanded="false" data-dropdown-toggle="user-dropdown"
                     data-dropdown-placement="bottom">
                     <span class="sr-only">Open user menu</span>
-                    <img class="w-8 h-8 rounded-full" src="#" alt="user photo">
+                    <img class="w-8 h-8 rounded-full" src="user.png" alt="user photo">
                 </button>
                 <!-- Dropdown menu -->
                 <div class="z-50 hidden my-4 text-base list-none bg-white divide-y divide-gray-100 rounded-lg shadow-sm dark:bg-gray-700 dark:divide-gray-600"
                     id="user-dropdown">
                     <div class="px-4 py-3">
-                        <span class="block text-sm text-gray-900 dark:text-white">Bonnie Green</span>
-                        <span class="block text-sm text-gray-500 truncate dark:text-gray-400">name@flowbite.com</span>
+                        <span class="block text-sm text-gray-900 dark:text-white">Javier Quispe</span>
+                        <span class="block text-sm text-gray-500 truncate dark:text-gray-400">javier@gmail.com</span>
                     </div>
                     <ul class="py-2" aria-labelledby="user-menu-button">
                         <li>
                             <a href="#"
-                                class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Dashboard</a>
+                                class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">panel de control</a>
                         </li>
                         <li>
                             <a href="#"
-                                class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Settings</a>
+                                class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Configuracion</a>
                         </li>
                         <li>
                             <a href="#"
-                                class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Earnings</a>
+                                class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Perfil</a>
                         </li>
                         <li>
                             <a href="#"
-                                class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Sign
-                                out</a>
+                                class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Cerrar sesion</a>
                         </li>
                     </ul>
                 </div>
@@ -68,8 +67,8 @@
                 <ul
                     class="flex flex-col p-4 mt-4 font-medium border border-gray-100 rounded-lg md:p-0 bg-gray-50 md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0 md:bg-white dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700">
                     <li>
-                        <a href="#"
-                            class="block px-3 py-2 text-white bg-blue-700 rounded-sm md:bg-transparent md:text-blue-700 md:p-0 md:dark:text-blue-500"
+                        <a href="index.html"
+                            class="block px-3 py-2 text-white bg-blue-700 rounded-sm md:bg-transparent md:text-blue-700 md:p-0 "
                             aria-current="page">Horario</a>
                     </li>
                     <li>
@@ -165,10 +164,10 @@
                 <ul
                     class="flex flex-wrap items-center mb-6 text-sm font-medium text-gray-500 sm:mb-0 dark:text-gray-400">
                     <li>
-                        <a href="#" class="hover:underline me-4 md:me-6">Horario</a>
+                        <a href="index.html" class="hover:underline me-4 md:me-6">Horario</a>
                     </li>
                     <li>
-                        <a href="#" class="hover:underline me-4 md:me-6">Usuarios</a>
+                        <a href="usuarios.html" class="hover:underline me-4 md:me-6">Usuarios</a>
                     </li>
                     <li>
                         <a href="#" class="hover:underline me-4 md:me-6">Asistencia</a>
@@ -362,9 +361,8 @@
                 document.getElementById('tituloNombre').innerHTML = ".: " + sessionStorage.getItem("nombreHorario") + " - Gestion 2025:.";
 
             }
+
             //---------- FUNCION BUSCAR USUARIO ----------------//
-
-
             // Evento de búsqueda en tiempo real
             document.getElementById("busqueda").addEventListener("input", async function () {
                 const usuariosRef = ref(database, "usuarios");
@@ -432,6 +430,7 @@
                     tablaUsuarios.innerHTML = `<tr class="bg-white border-b border-gray-200 dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"><td class="px-6 py-4 text-right" colspan="2">No se encontraron usuarios</td></tr>`;
                 }
             }
+
             //------------- REGISTRAR LA ASISTENCIA -------------//
             window.capturarAsistencia = function (boton) {
 
@@ -440,6 +439,8 @@
                 const idHorario = sessionStorage.getItem("idHorario");
                 registrarAsistencia(ci, fechaSeleccionada, idHorario);
             }
+
+
             async function registrarAsistencia(ci, fecha, idHorario) {
                 const db = getDatabase();  // Obtener la base de datos
                 const asistenciaRef = ref(db, 'asistencias');  // Referencia a la colección "asistencias"
@@ -478,7 +479,6 @@
                 }
             }
 
-
             //-------------- LISTAR FECHAS DE ASISTENCIA --------------//
             async function obtenerAsistencias() {
                 const idhorarios = sessionStorage.getItem("idHorario");  // Obtener el idhorario de sessionStorage
@@ -502,15 +502,15 @@
                         }
                         console.log(fechas);
                         // Mostrar las fechas únicas en la tabla
-                        
+                        let contador = 1;
                         let filasHTML = '';
                         fechas.forEach((fecha, index) => {
                             // Creamos la fila como una cadena de texto en formato HTML
-                            const numeroFila = index + 1;
+                            
                             filasHTML += `
                             <tr class="bg-white border-b border-gray-200 dark:bg-gray-800 dark:border-gray-700">
-                                <td class="px-6 py-4">${numeroFila}</td>
-                                <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">${fecha}</td>
+                                <td class="px-6 py-4"> ${contador} </td>
+                                <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">${formatearFecha(fecha)}</td>
                                 <td class="px-6 py-4">
                                     <button type="button" id="btnMostrar" data-fecha="${fecha}" data-horario="${idhorarios}" data-nombre="${nombreMateria}"
                                             class="btnMostrar text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-full text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700">
@@ -521,8 +521,8 @@
                                         <i class='bx bxs-download'></i> Generar Excel
                                     </button>
                                 </td>
-                            </tr>
-                        `;
+                            </tr>`;
+                            contador++;
                         });
 
                         // Insertamos las filas generadas dentro del <tbody> con el id "tablaCuerpo"
@@ -557,6 +557,7 @@
                     console.error("Error al obtener los datos:", error);
                 }
             }
+
             //-------------- FUNCION AGREGAR ASISTENCIAS ---------------//
             document.getElementById("btnAsistencia").addEventListener("click", function () {
                 const datoRecibido = sessionStorage.getItem("idHorario");
@@ -585,8 +586,6 @@
                 alert(datoRecibido + " " + fechaFormateada);
             });
 
-
-
             //---------- LISTAR USUARIOS DE LA ASISTENCIA EN FECHA ------------//
             document.addEventListener("click", function (event) {
                 if (event.target.closest(".btnMostrar")) {
@@ -598,7 +597,29 @@
                 }
             });
         });
+        function formatearFecha(fechaStr) {
+            // Asegúrate de que la fecha que pasas está en formato ISO 8601: "YYYY-MM-DD"
+            const fecha = new Date(fechaStr + "T00:00:00");
 
+            if (isNaN(fecha)) {
+                console.log("🚨 Error: la fecha no es válida.");
+                return;
+            }
+
+            // Definir los nombres de los días y los meses
+            const dias = ["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"];
+            const meses = ["enero", "Febrero", "marzo", "abril", "mayo", "junio", "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"];
+
+            // Obtener el día de la semana y la fecha
+            const diaSemana = dias[fecha.getDay()];
+            const diaMes = fecha.getDate();
+            const mes = meses[fecha.getMonth()];
+            const anio = fecha.getFullYear();
+
+            // Formatear la fecha
+            const fechaFormateada = `${diaSemana} ${diaMes} de ${mes} de ${anio}`;
+            return fechaFormateada;
+        }
 
 
     </script>
