@@ -140,27 +140,6 @@
                             <td class="px-6 py-4 text-center" colspan="6">
                                 No existen datos
                             </td>
-                            <!-- <td class="px-6 py-4">
-                                6998583
-                            </td>
-                            <td class="px-6 py-4">
-                                QUISPE PINTO
-                            </td>
-                            <td class="px-6 py-4">
-                                JAVIER HENRY
-                            </td>
-                            <td class="px-6 py-4">
-                                <span
-                                    class="bg-green-100 text-green-800 text-sm font-medium me-2 px-2.5 border-green-600 border-2 rounded dark:bg-green-900 dark:text-green-300 py-1">Estudiante</span>
-                            </td>
-                            <td class="px-6 py-4">
-                                <button type="button" data-modal-target="medium-modal" data-modal-toggle="medium-modal"
-                                    class="text-white bg-violet-800 hover:bg-violet-900 focus:outline-none focus:ring-4 focus:ring-violet-300 font-medium rounded-full text-sm px-5 py-2.5 me-2 mb-2 ">
-                                    Ver
-                                    Prestamos</button>
-
-                            </td> -->
-
                         </tr>
                     </tbody>
                     <tr>
@@ -448,6 +427,27 @@
                 return;
             }
 
+            const horariosRef = ref(database, `horarios/${materia}`);
+            //creamos la consulta para obtener los horarios
+            let docente ="", horaI="", horaF="";
+            try {
+                const snapshot = await get(horariosRef);
+
+                if (snapshot.exists()) {
+                const datos = snapshot.val();
+                console.log("Asistencia encontrada:", datos);
+                docente = datos.idProfesor;
+                horaI = datos.horaI;
+                horaF=datos.horaF;
+                } else {
+                console.log(`No se encontró asistencia con el índice ${materia}`);
+                }
+            } catch (error) {
+                console.error("Error al obtener la asistencia:", error);
+            }
+
+            
+
             const workbook = new ExcelJS.Workbook();
             const worksheet = workbook.addWorksheet("Clase 1");
 
@@ -483,7 +483,7 @@
             //Datos de la materia y carrera
             worksheet.getCell("B4").value = "Materia:";
             worksheet.mergeCells("C4:E4");
-            worksheet.getCell("C4").value = "nombreMateria:";
+            worksheet.getCell("C4").value = nombreMateria.toUpperCase();
             worksheet.getCell("C4").alignment = { horizontal: "center" };
             worksheet.getCell("C4").font = { bold: true };
             worksheet.getCell("F4").value = "Carrera:";
@@ -493,27 +493,20 @@
             worksheet.getCell("G4").font = { bold: true };
             // 🔹 Docente y horario
             worksheet.getCell("B5").value = "Nombre de Docente:";
-            worksheet.getCell("B5").alignment = { horizontal: "center" };
             worksheet.mergeCells("C5:H5");
-            worksheet.getCell("C5").value = "Nombre del docente";
+            worksheet.getCell("C5").value = docente.toUpperCase();;
+            worksheet.getCell("C5").alignment = { horizontal: "center" };
+            worksheet.getCell("C5").font = { bold: true };
             worksheet.getCell("D3").font = { bold: true };
 
             // Turno y horario
             worksheet.getCell("B6").value = "Turno: NOCHE";
             worksheet.getCell("C6").value = "Hora:";
-            worksheet.getCell("D6").value = "19:00";
+            worksheet.getCell("D6").value = horaI;
             worksheet.getCell("D6").font = { bold: true };
             worksheet.getCell("E6").value = "HASTA";
-            worksheet.getCell("F6").value = "20:30";
+            worksheet.getCell("F6").value = horaF;
             worksheet.getCell("F6").font = { bold: true };
-
-            // 🔹 Agregar imagen (si tienes una URL o base64)
-
-
-
-            // 🔹 Definir columnas
-            // 🔹 Definir las columnas en la fila 7 (sin sobrescribir el encabezado)
-            //worksheet.getRow(7).values = ["N", "Nombre Completo", "CI", "CI", "Boleta", "Credencial", "Observación"];
             worksheet.mergeCells("A7:A8");
             worksheet.getCell("A7").value = "Nro.";
             worksheet.mergeCells("B7:B8");
@@ -611,10 +604,8 @@
 
             // 🔹 Descargar archivo
             const buffer = await workbook.xlsx.writeBuffer();
-            saveAs(new Blob([buffer], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" }), "" + materia + " " + fecha + "-CR-JAVIER QUISPE.xlsx");
+            saveAs(new Blob([buffer], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" }), "" + fecha + " " + materia + "-CR-JAVIER QUISPE.xlsx");
         });
-
-
 
         // Función para obtener json
         async function obtenerAsistentesJSON(database, fecha, materia) {
@@ -800,8 +791,6 @@
             const fechaFormateada = `${diaSemana} ${diaMes} de ${mes} de ${anio}`;
             return fechaFormateada;
         }
-
-
 
     </script>
 </body>
