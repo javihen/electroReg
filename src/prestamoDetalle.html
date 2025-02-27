@@ -92,69 +92,136 @@
         </div>
     </nav>
     <div class="p-10">
+        <div class="w-full mb-5 text-xl font-bold text-center text-red-600">Solicitud de material para practicas en el
+            Laboratorio de Electronica</div>
         <div class="flex flex-row justify-between">
-            <div id="tituloNombre"
-                class="inline-flex items-center px-5 py-2.5 text-sm font-medium text-center text-white bg-green-700 rounded-lg  focus:ring-4 focus:outline-none focus:ring-green-300 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">
-                .: Listado de Componentes: - Gestion 2025 :.
-            </div>
-            <div id="fecha"
-                class="inline-flex items-center px-5 py-2.5 text-sm font-medium text-center text-white bg-pink-700 rounded-lg  focus:ring-4 focus:outline-none focus:ring-pink-300 dark:bg-pink-600 dark:hover:bg-pink-700 dark:focus:ring-pink-800">
-                Fecha
-            </div>
+            <table class="w-full">
+                <tr>
+                    <td>Nombre: </td>
+                    <td colspan="3">
+                        <div id="nombre"
+                            class="inline-flex items-center px-5 py-2.5 text-sm font-medium text-center text-green-700 border border-green-700 rounded-lg  focus:ring-4 focus:outline-none focus:ring-green-300 ">
+                            .: Jaimito Eduardo Escalante Dominguez - Gestion 2025 :.
+                        </div>
+                    </td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>Materia: </td>
+                    <td>
+                        <div id="materia"
+                            class="inline-flex items-center px-5 py-2.5 text-sm font-medium text-center text-green-700 border border-green-700 rounded-lg  focus:ring-4 focus:outline-none focus:ring-green-300">
+                            .: Sistemas de control y laboratorio :.
+                        </div>
+                    </td>
+                    <td>Fecha: </td>
+                    <td>
+                        <div id="fecha"
+                            class="inline-flex items-center px-5 py-2.5 text-sm font-medium text-center text-pink-700 border border-pink-700 rounded-lg  focus:ring-4 focus:outline-none focus:ring-pink-300">
+                            Lunes 5 de Septiembre de 2025
+                        </div>
+                    </td>
+                </tr>
+            </table>
+
+
+
+
+
 
             <!-- Modal toggle -->
             <button data-modal-target="crud-modal" data-modal-toggle="crud-modal"
                 class="block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center "
                 type="button">
-                Registrar Componente
+                Solicitar Prestamo
             </button>
         </div>
-        <div class="relative mt-10 overflow-x-auto shadow-md sm:rounded-lg">
-            <div class="relative overflow-x-auto">
-                <table class="w-full text-sm text-left text-gray-500 rtl:text-right dark:text-gray-400">
-                    <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-                        <tr>
-                            <th scope="col" class="px-6 py-3">
-                                Nro.
-                            </th>
-                            <th scope="col" class="px-6 py-3">
-                                Cantidad
-                            </th>
-                            <th scope="col" class="px-6 py-3">
-                                Equipo
-                            </th>
-                            <th scope="col" class="px-6 py-3">
-                                Marca
-                            </th>
-                            <th scope="col" class="px-6 py-3">
-                                Caracteristicas
-                            </th>
-                            <th scope="col" class="px-6 py-3">
-                                Observaciones
-                            </th>
-                            <th scope="col" class="px-6 py-3">
-                                Opciones
-                            </th>
+        <div class="flex justify-center w-full">
+            <div class="relative w-2/3 mt-10 overflow-x-auto rounded-md shadow-md">
+                <div class="flex justify-center overflow-x-auto ">
+                    <table class="w-full">
+                        <thead class="text-xs uppercase bg-gray-500 rounded-tl-md rounded-tr-md text-gray-50 ">
+                            <tr>
+                                <th scope="col" class="px-6 py-3">
+                                    Cant
+                                </th>
+                                <th scope="col" class="px-6 py-3">
+                                    Componente
+                                </th>
+                                <th scope="col" class="px-6 py-3">
+                                    Marca
+                                </th>
+                                <th scope="col" class="px-6 py-3">
+                                    Estado
+                                </th>
+                                <th scope="col" class="px-6 py-3">
+                                    Opciones
+                                </th>
 
+                            </tr>
+                        </thead>
+                        <tbody id="tablaBody">
+                            <!-- <tr class="bg-white border-b border-gray-200 ">
+                                <td class="px-6 py-4 text-center" colspan="6">
+                                    🚫 No existen datos de componentes
+                                </td>
+                            </tr> -->
+                            <tr class="text-center">
+                                <td>2</td>
+                                <td>Fuente de energia</td>
+                                <td>INEEIn</td>
+                                <td><span
+                                        class="bg-red-100 text-red-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded-sm border border-red-400">Prestado</span>
+                                </td>
+                                <td>
+                                    <button type="button"
+                                        class="text-blue-700 border border-blue-700 hover:bg-blue-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm p-2.5 text-center inline-flex items-center me-2 m-2">
+                                        <i class='bx bx-edit-alt'></i>
+                                        <span class="sr-only">Editar prestamo</span>
+                                    </button>
+                                    <button type="button"
+                                        class="text-red-700 border border-red-700 hover:bg-red-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm p-2.5 text-center inline-flex items-center me-2 ">
+                                        <i class='bx bx-trash'></i>
+                                        <span class="sr-only">Eliminar prestamo</span>
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr class="text-center">
+                                <td>2</td>
+                                <td>Fuente de energia</td>
+                                <td>INEEIn</td>
+                                <td><span
+                                        class="bg-green-100 text-green-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded-sm border border-green-400">Devuelto</span>
+                                </td>
+                                <td>
+                                    <button type="button"
+                                        class="text-blue-700 border border-blue-700 hover:bg-blue-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm p-2.5 text-center inline-flex items-center me-2 m-2">
+                                        <i class='bx bx-edit-alt'></i>
+                                        <span class="sr-only">Editar prestamo</span>
+                                    </button>
+                                    <button type="button"
+                                        class="text-red-700 border border-red-700 hover:bg-red-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm p-2.5 text-center inline-flex items-center me-2 ">
+                                        <i class='bx bx-trash'></i>
+                                        <span class="sr-only">Eliminar prestamo</span>
+                                    </button>
+                                </td>
+                            </tr>
+
+                        </tbody>
+                        <tr>
+                            <td colspan="4"></td>
+                            <!-- <td colspan="2" class="p-4 text-center">
+                                <button type="button" id="btnGenerarExcel"
+                                    class="text-white bg-green-700 hover:bg-green-800 focus:outline-none focus:ring-4 focus:ring-green-300 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">
+                                    <i class='bx bxs-download'></i> Generar archivo Excel
+                                </button>
+                            </td> -->
                         </tr>
-                    </thead>
-                    <tbody id="tablaBody">
-                        <tr class="bg-white border-b border-gray-200 dark:bg-gray-800 dark:border-gray-700">
-                            <td class="px-6 py-4 text-center" colspan="6">
-                                🚫 No existen datos de componentes
-                            </td>
-                        </tr>
-                    </tbody>
-                    <tr>
-                        <td colspan="4"></td>
-                        <!-- <td colspan="2" class="p-4 text-center">
-                            <button type="button" id="btnGenerarExcel"
-                                class="text-white bg-green-700 hover:bg-green-800 focus:outline-none focus:ring-4 focus:ring-green-300 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">
-                                <i class='bx bxs-download'></i> Generar archivo Excel
-                            </button>
-                        </td> -->
-                    </tr>
-                </table>
+                    </table>
+
+
+                </div>
             </div>
         </div>
     </div>
@@ -286,17 +353,22 @@
         const database = getDatabase(app);
 
 
-        const params = new URLSearchParams(window.location.search);
+        /* const params = new URLSearchParams(window.location.search);
         const fecha = params.get("fecha");
-        const horario = params.get("horario");
-        const nombreMateria = params.get("nombreMateria");
+        const materia = params.get("materia");
+        const ci = params.get("ci"); */
 
-        document.getElementById('tituloNombre').innerHTML = ".: " + nombreMateria + " - Gestion 2025:.";
-        document.getElementById('fecha').innerHTML = "" + formatearFecha(fecha) + " ";
+        /*         document.getElementById('tituloNombre').innerHTML = ".: " + nombreMateria + " - Gestion 2025:.";
+                document.getElementById('fecha').innerHTML = "" + formatearFecha(fecha) + " ";
+         */
+
+        const fecha = sessionStorage.getItem("fecha");
+        const materia = sessionStorage.getItem("materia");
+        const ci = sessionStorage.getItem("ci");
 
         console.log("Fecha:", fecha);
-        console.log("Horario:", horario);
-        console.log("Materia:", nombreMateria);
+        console.log("materia:", materia);
+        console.log("ci:", ci);
 
 
         // Evento de búsqueda en tiempo real

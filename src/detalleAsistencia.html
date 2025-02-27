@@ -786,6 +786,11 @@
                 console.log("materia " + horario);
                 // Llamamos a la función que deseamos ejecutar
                 //mostrarPrestamo(ci, fecha, horario);
+                sessionStorage.setItem("ci", ci); // Guardar en sessionStorage
+                sessionStorage.setItem("fecha", fecha)
+                sessionStorage.setItem("materia", horario)
+                // Redirigir a la página B
+                window.location.href = "prestamoDetalle.html"; // Aquí pones la ruta de la página B
             }
         });
 
