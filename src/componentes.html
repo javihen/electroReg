@@ -69,11 +69,10 @@
                     class="flex flex-col p-4 mt-4 font-medium border border-gray-100 rounded-lg md:p-0 bg-gray-50 md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0 md:bg-white dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700">
                     <li>
                         <a href="index.html"
-                            class="block px-3 py-2 text-white bg-blue-700 rounded-sm md:bg-transparent md:text-blue-700 md:p-0 md:dark:text-blue-500"
-                            aria-current="page">Horario</a>
+                            class="block px-3 py-2 text-gray-900 rounded-sm hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700">Horario</a>
                     </li>
                     <li>
-                        <a href="#"
+                        <a href="usuarios.html"
                             class="block px-3 py-2 text-gray-900 rounded-sm hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700">Usuarios</a>
                     </li>
                     <li>
@@ -82,7 +81,8 @@
                     </li>
                     <li>
                         <a href="componentes.html"
-                            class="block px-3 py-2 text-gray-900 rounded-sm hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700">Componentes</a>
+                            class="block px-3 py-2 text-white bg-blue-700 rounded-sm md:bg-transparent md:text-blue-700 md:p-0 "
+                            aria-current="page">Componentes</a>
                     </li>
                     <li>
                         <a href="#"
@@ -136,27 +136,10 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <!-- <tr>
+                    <tr>
                         <td colspan="7" class="py-3 text-center">🚫 No hay datos sobre componentes</td>
-                    </tr> -->
-                    <tr class="text-center">
-                        <td>1</td>
-                        <td>15</td>
-                        <td>FUENTE</td>
-                        <td>INEEIN</td>
-                        <td>DE COLOR NEGRO CON PLOMO</td>
-                        <td><span
-                                class="bg-green-100 text-green-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded-sm dark:bg-gray-700 dark:text-green-400 border border-green-400">FUNCIONAL</span>
-                        </td>
-                        <td>
-                            <button
-                                class="text-white bg-red-700 hover:bg-red-800 focus:outline-none focus:ring-4 focus:ring-red-200 font-medium rounded-full text-sm px-3 py-2.5 me-2 mb-2 btn-eliminar"
-                                data-ci=""><i class='bx bx-trash'></i></button>
-                            <button
-                                class="text-white bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-200 font-medium rounded-full text-sm px-3 py-2.5 me-2 mb-2 btn-editar"
-                                data-ci=""><i class='bx bx-edit-alt'></i> Editar</button>
-                        </td>
                     </tr>
+
                 </tbody>
             </table>
         </div>
@@ -183,7 +166,7 @@
                         <a href="#" class="hover:underline me-4 md:me-6">Asistencia</a>
                     </li>
                     <li>
-                        <a href="#" class="hover:underline me-4 md:me-6">Componentes</a>
+                        <a href="componentes.html" class="hover:underline me-4 md:me-6">Componentes</a>
                     </li>
                     <li>
                         <a href="#" class="hover:underline">Prestamos</a>
@@ -432,6 +415,92 @@
 
         //=========== FUNCION QUE SE EJECUTA ===========//
         obtenerComponentes();
+        //======= FUNCION PARA OBTENER COMPONENTES ========//
+        function obtenerComponentes() {
+            const db = getDatabase();
+            const componentesRef = ref(db, "componentes"); // Referencia a la colección de usuarios
+
+            // Obtener todos los usuarios
+            get(componentesRef)
+                .then((snapshot) => {
+                    if (snapshot.exists()) {
+                        // Llamar a la función para mostrar los usuarios en la tabla
+                        mostrarComponentes(snapshot.val());
+                    } else {
+                        console.log("No hay componentes registrados.");
+                    }
+                })
+                .catch((error) => {
+                    console.error("Error al obtener usuarios:", error);
+                });
+        }
+        //==== FUNCION PARA MOSTRAR A LOS COMPONENTES ====//
+        function mostrarComponentes(usuarios) {
+            const tabla = document.getElementById("tablaUsuarios"); // Referencia a la tabla HTML
+            tabla.innerHTML = ""; // Limpiar la tabla antes de agregar nuevos datos
+            console.log(usuarios)
+            // Crear la cabecera de la tabla
+            const header = `<thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                    <tr class="text-center">
+                        <th scope="col" class="px-6 py-3">
+                            Nro.
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            Cantidad
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            Equipo
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            Marca
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            Caracteristicas
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            Observaciones
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            Opciones
+                        </th>
+
+                    </tr>
+                </thead>`;
+            tabla.innerHTML += header;
+
+            let i = 1;
+            Object.entries(usuarios) // Obtiene cada clave (ID) y su respectivo valor (datos del usuario)
+                .sort(([, a], [, b]) => a.nombre.localeCompare(b.nombre)) // Ordena por nombre
+                .forEach(([id, usuario]) => { // id = clave única, usuario = datos
+                    console.log("ID del documento:", id);
+
+                    const key = usuario.id;
+                    console.log(usuario)
+                    const row = `
+                    <tr class="text-center">
+                        <td>${i}</td>
+                        <td>${usuario.cantidad}</td>
+                        <td>${usuario.nombre}</td>
+                        <td>${usuario.marca}</td>
+                        <td>${usuario.caracteristica}</td>
+                        <td><span
+                                class="bg-green-100 text-green-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded-sm dark:bg-gray-700 dark:text-green-400 border border-green-400">${usuario.estado}</span>
+                        </td>
+                        <td>
+                            <button
+                                class="text-white bg-red-700 hover:bg-red-800 focus:outline-none focus:ring-4 focus:ring-red-200 font-medium rounded-full text-sm px-3 py-2.5 me-2 mb-2 btn-eliminar"
+                                data-id="${id}"><i class='bx bx-trash'></i></button>
+                            <button
+                                class="text-white bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-200 font-medium rounded-full text-sm px-3 py-2.5 me-2 mb-2 btn-editar"
+                                data-id=""><i class='bx bx-edit-alt'></i> Editar</button>
+                        </td>
+                    </tr>`;
+                    tabla.innerHTML += row;
+                    i++;
+                }
+                )
+        }
+
         //=========== FUNCION AGREGAR USUARIO ==========//
         function agregarUsuario(event) {
             event.preventDefault();
@@ -469,10 +538,37 @@
                 }
             });
         }
+
+        //=========== FUNCION ELIMINAR COMPONENTE ========//
+        // Función para eliminar un usuario de Firebase
+        function eliminarComponente(id) {
+            if (!id) {
+                console.error("ID no proporcionado");
+                return;
+            }
+
+            const usuarioRef = ref(database, `componentes/${id}`); // Crear la referencia correcta
+
+            remove(usuarioRef)
+                .then(() => {
+                    console.log(`Componente con ID ${id} eliminado correctamente`);
+                    obtenerComponentes();
+                    alert("✅ Componente con eliminado correctamente")
+                    // Eliminar la fila en la tabla para actualizar la UI
+                    //document.querySelector(`[data-id='${id}']`).closest("tr").remove();
+                })
+                .catch((error) => {
+                    console.error("❌ Error al eliminar componente:", error);
+                });
+        }
+
+
+
         //============ FUNCION CERRAR MODAL ============//
         function cerrarModal() {
             document.getElementById("crud-modal").classList.add("hidden");
         }
+
         //======== FUNCION BUSQUEDA DE USUARIO =========//
         function buscarUsuarioPorCI(ci) {
             const db = getDatabase();
@@ -497,99 +593,7 @@
                     return false; // Retorna false si hay un error en la consulta
                 });
         }
-        //======= FUNCION PARA OBTENER USUARIOS ========//
-        function obtenerComponentes() {
-            const db = getDatabase();
-            const componentesRef = ref(db, "componentes"); // Referencia a la colección de usuarios
 
-            // Obtener todos los usuarios
-            get(componentesRef)
-                .then((snapshot) => {
-                    if (snapshot.exists()) {
-                        // Llamar a la función para mostrar los usuarios en la tabla
-                        mostrarComponentes(snapshot.val());
-                    } else {
-                        console.log("No hay componentes registrados.");
-                    }
-                })
-                .catch((error) => {
-                    console.error("Error al obtener usuarios:", error);
-                });
-        }
-        //==== FUNCION PARA MOSTRAR A LOS USUARIOS ====//
-        function mostrarComponentes(usuarios) {
-            const tabla = document.getElementById("tablaUsuarios"); // Referencia a la tabla HTML
-            tabla.innerHTML = ""; // Limpiar la tabla antes de agregar nuevos datos
-
-            // Crear la cabecera de la tabla
-            const header = `<thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-                    <tr class="text-center">
-                        <th scope="col" class="px-6 py-3">
-                            Nro.
-                        </th>
-                        <th scope="col" class="px-6 py-3">
-                            Cantidad
-                        </th>
-                        <th scope="col" class="px-6 py-3">
-                            Equipo
-                        </th>
-                        <th scope="col" class="px-6 py-3">
-                            Marca
-                        </th>
-                        <th scope="col" class="px-6 py-3">
-                            Caracteristicas
-                        </th>
-                        <th scope="col" class="px-6 py-3">
-                            Observaciones
-                        </th>
-                        <th scope="col" class="px-6 py-3">
-                            Opciones
-                        </th>
-
-                    </tr>
-                </thead>`;
-            tabla.innerHTML += header;
-            // Convertir los usuarios a un arreglo de objetos
-            const usuariosArray = Object.values(usuarios);
-
-            // Ordenar los usuarios por apellidos (alfabéticamente)
-            usuariosArray.sort((a, b) => {
-                if (a.nombre.toLowerCase() < b.nombre.toLowerCase()) {
-                    return -1;
-                }
-                if (a.nombre.toLowerCase() > b.nombre.toLowerCase()) {
-                    return 1;
-                }
-                return 0;
-            });
-
-            // Iterar sobre los usuarios y crear las filas de la tabla
-            let i = 1;
-            usuariosArray.forEach((usuario) => {
-                const row = `
-                    <tr class="text-center">
-                        <td>${i}</td>
-                        <td>${usuario.cantidad}</td>
-                        <td>${usuario.nombre}</td>
-                        <td>${usuario.marca}</td>
-                        <td>${usuario.caracteristica}</td>
-                        <td><span
-                                class="bg-green-100 text-green-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded-sm dark:bg-gray-700 dark:text-green-400 border border-green-400">${usuario.estado}</span>
-                        </td>
-                        <td>
-                            <button
-                                class="text-white bg-red-700 hover:bg-red-800 focus:outline-none focus:ring-4 focus:ring-red-200 font-medium rounded-full text-sm px-3 py-2.5 me-2 mb-2 btn-eliminar"
-                                data-ci=""><i class='bx bx-trash'></i></button>
-                            <button
-                                class="text-white bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-200 font-medium rounded-full text-sm px-3 py-2.5 me-2 mb-2 btn-editar"
-                                data-ci=""><i class='bx bx-edit-alt'></i> Editar</button>
-                        </td>
-                    </tr>`;
-                tabla.innerHTML += row;
-                i++;
-            }
-            )
-        }
 
         function abrirModal(ci) {
             console.log("abrir modal")
@@ -598,8 +602,9 @@
         // Agrega el evento a un elemento contenedor (delegación de eventos) esto nos funciona para cuando la tabla es generada de forma dinamica
         document.getElementById("tablaUsuarios").addEventListener("click", function (event) {
             if (event.target.closest(".btn-eliminar")) {
-                const ci = event.target.closest(".btn-eliminar").dataset.ci;
-                eliminarUsuario(ci);
+                const id = event.target.closest(".btn-eliminar").dataset.id;
+                console.log(id)
+                eliminarComponente(id);
             }
             if (event.target.closest(".btn-modal")) {
                 const ci = event.target.closest(".btn-modal").dataset.ci;
@@ -607,34 +612,6 @@
             }
         });
 
-        // Función para eliminar un usuario de Firebase
-        function eliminarUsuario(ci) {
-            const db = getDatabase();
-            const usuariosRef = ref(db, "usuarios");
-
-            // Consulta para buscar el usuario por su CI
-            const consulta = query(usuariosRef, orderByChild("ci"), equalTo(ci));
-
-            get(consulta)
-                .then(snapshot => {
-                    if (snapshot.exists()) {
-                        const usuarioKey = Object.keys(snapshot.val())[0]; // Obtener la clave del usuario
-                        const usuarioAEliminarRef = ref(db, `usuarios/${usuarioKey}`);
-
-                        // Eliminar el usuario
-                        remove(usuarioAEliminarRef)
-                            .then(() => {
-                                console.log("✅ Usuario eliminado con éxito");
-                                alert(" ✅ Usuario eliminado correctamente.");
-                                obtenerUsuarios();
-                            })
-                            .catch(error => console.error("Error al eliminar usuario:", error));
-                    } else {
-                        console.log("Usuario no encontrado.");
-                    }
-                })
-                .catch(error => console.error("Error en la consulta:", error));
-        }
 
 
     </script>
