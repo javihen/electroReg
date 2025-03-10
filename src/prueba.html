@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Horario Dinámico</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.16/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100">
+  <div class="container mx-auto p-4">
+    <h1 class="text-3xl text-center font-semibold mb-4">Horario Semanal</h1>
+    <div class="relative mt-10 overflow-x-auto shadow-md sm:rounded-lg">
+    <table class="w-full text-sm text-left text-gray-500 rtl:text-right ">
+        <thead class="text-xs text-center text-gray-700 uppercase ">
+            <tr>
+                <th scope="col" class="w-6 px-6 py-3">
+                    Hora
+                </th>
+                <th scope="col" class="w-1/6 px-6 py-3 bg-gray-50">
+                    Lunes
+                </th>
+                <th scope="col" class="w-1/6 px-6 py-3">
+                    Martes
+                </th>
+                <th scope="col" class="w-1/6 px-6 py-3 bg-gray-50 ">
+                    Miercoles
+                </th>
+                <th scope="col" class="w-1/6 px-6 py-3">
+                    Jueves
+                </th>
+                <th scope="col" class="w-1/6 px-6 py-3 bg-gray-50 ">
+                    Viernes
+                </th>
+                <th scope="col" class="w-1/6 px-6 py-3">
+                    Sabado
+                </th>
+            </tr>
+        </thead>
+      <tbody id="schedule" class="text-center">
+        <!-- Filas de horas -->
+      </tbody>
+    </table>
+    </div>
+    <!-- Versión no modular de Firebase -->
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+
+
+    <script src="app.js"></script>
+    <!-- <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            // Seleccionar todos los botones que tengan el atributo data-id
+            const botones = document.querySelectorAll("button[data-id]");
+
+            // Función que se ejecuta cuando cualquiera de los botones es presionado
+            function irAPaginaB() {
+                const dato = this.getAttribute("data-id"); // Obtener el valor de data-id del botón presionado
+                const nombre = this.getAttribute("data-nombre");
+                sessionStorage.setItem("idHorario", dato); // Guardar en sessionStorage
+                sessionStorage.setItem("nombreHorario", nombre)
+                // Redirigir a la página B
+                window.location.href = "clase.html"; // Aquí pones la ruta de la página B
+            }
+
+            // Asignar el evento de clic a cada botón
+            botones.forEach(function (boton) {
+                boton.addEventListener("click", irAPaginaB); // Asigna la función a cada botón
+            });
+        });
+    </script> -->
+  </div>
+</body>
+</html>

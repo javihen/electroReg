@@ -1,249 +1,192 @@
-<script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getDatabase, ref, set, get, push, query, orderByChild, equalTo, remove } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
-        const firebaseConfig = {
-            apiKey: "AIzaSyC_Yl50SusdST7Gqal5UBahp97Y-5iqMzE",
-            authDomain: "electroreg-40fdf.firebaseapp.com",
-            databaseURL: "https://electroreg-40fdf-default-rtdb.firebaseio.com",
-            projectId: "electroreg-40fdf",
-            storageBucket: "electroreg-40fdf.firebasestorage.app",
-            messagingSenderId: "28054683949",
-            appId: "1:28054683949:web:08fdd0d53b9e2feb3153a4"
-        };
-
-        const app = initializeApp(firebaseConfig);
-        const database = getDatabase(app);
-
-        document.addEventListener("DOMContentLoaded", () => {
-            document
-                .getElementById("userForm")
-                .addEventListener("submit", agregarUsuario);
-        });
-
-
-        //=========== FUNCION QUE SE EJECUTA ===========//
-        obtenerUsuarios();
-        //=========== FUNCION AGREGAR USUARIO ==========//
-        function agregarUsuario(event) {
-            event.preventDefault();
-
-            const ci = document.getElementById("ci").value;
-            const apellidos = document.getElementById("apellidos").value;
-            const nombres = document.getElementById("nombres").value;
-            const rol = document.getElementById("rol").value;
-
-            buscarUsuarioPorCI(ci).then((existeUsuario) => {
-                if (!existeUsuario) {
-                    // Generar un ID aleatorio y guardar en Firebase
-                    const usuariosRef = ref(database, "usuarios");
-                    const nuevoUsuarioRef = push(usuariosRef); // Crea un ID único automáticamente
-
-                    set(nuevoUsuarioRef, {
-                        ci: ci,
-                        apellidos: apellidos,
-                        nombres: nombres,
-                        rol: rol,
-                    })
-                        .then(() => {
-                            alert("Usuario agregado correctamente.");
-                            document.getElementById("userForm").reset();
-                            obtenerUsuarios();
-                        })
-                        .catch((error) => {
-                            console.error("Error al agregar usuario:", error);
-                        });
-                } else {
-                    console.log(buscarUsuarioPorCI(ci));
-                    alert("El usuario con ci ya se encuentra registrado")
-                }
-            });
+// Configuración de Firebase
+const firebaseConfig = {
+    apiKey: "AIzaSyC_Yl50SusdST7Gqal5UBahp97Y-5iqMzE",
+  authDomain: "electroreg-40fdf.firebaseapp.com",
+  databaseURL: "https://electroreg-40fdf-default-rtdb.firebaseio.com",
+  projectId: "electroreg-40fdf",
+  storageBucket: "electroreg-40fdf.firebasestorage.app",
+  messagingSenderId: "28054683949",
+  appId: "1:28054683949:web:08fdd0d53b9e2feb3153a4"
+  };
+  
+  // Inicializa Firebase
+  const app = firebase.initializeApp(firebaseConfig);
+  const database = firebase.database();
+  
+  // Referencia a la base de datos de horarios
+  const horariosRef = database.ref("horarios");
+  
+  // Días de la semana
+  const daysOfWeek = ["LUNES", "MARTES", "MIERCOLES", "JUEVES", "VIERNES", "SABADO"];
+  
+  // Función para cargar los horarios desde Firebase
+function loadSchedule() {
+    // Referencia a la base de datos de horarios
+    const horariosRef = database.ref("horarios");
+  
+    horariosRef.once("value").then(snapshot => {
+      const data = snapshot.val();
+      //console.log(data);
+      // Obtener el contenedor de la tabla donde se mostrarán los horarios
+      const scheduleContainer = document.getElementById("schedule");
+  
+      // Limpiar la interfaz antes de cargar los nuevos datos
+      scheduleContainer.innerHTML = "";
+  
+      // Crear un objeto que contendrá los horarios organizados por día
+      const schedulesByDay = {
+        "LUNES": [],
+        "MARTES": [],
+        "MIERCOLES": [],
+        "JUEVES": [],
+        "VIERNES": [],
+        "SABADO": []
+      };
+      //console.log(schedulesByDay);
+      // Agrupar los horarios por día
+      Object.values(data).forEach(schedule => {
+        const { dia, horaI, horaF, idProfesor, materia, semestre } = schedule;
+        
+        if (schedulesByDay[dia]) {
+          schedulesByDay[dia].push({ horaI, horaF, idProfesor, materia, semestre });
         }
-        //============ FUNCION CERRAR MODAL ============//
-        function cerrarModal() {
-            document.getElementById("crud-modal").classList.add("hidden");
-        }
-        //======== FUNCION BUSQUEDA DE USUARIO =========//
-        function buscarUsuarioPorCI(ci) {
-            const db = getDatabase();
-            const usuariosRef = ref(db, "usuarios"); // Referencia a la colección de usuarios
+      });
+  
+      // Crear las filas de la tabla (por cada hora en el horario)
+      const hours = ["07:30", "09:00", "10:30", "12:00", "13:30", "15:00", "19:00", "20:30"];
+      hours.forEach(hour => {
+        const row = document.createElement("tr");
+        row.classList.add("border-b", "border-gray-200", "bg-gray-50");
+        // Crear la celda para la hora
+        const hourCell = document.createElement("td");
+        hourCell.classList.add("border", "border-gray-300", "px-4", "py-2", "text-center");
+        hourCell.textContent = hour;
+        row.appendChild(hourCell);
+  
+        // Crear las celdas para cada día de la semana
+        daysOfWeek.forEach(day => {
+          const dayCell = document.createElement("td");
+          dayCell.classList.add("border", "border-gray-300", "py-2", "text-center");
+  
+          // Verificar si existen horarios para el día y hora
+          const schedulesForDay = schedulesByDay[day];
 
-            // Crear la consulta para buscar por CI
-            const consulta = query(usuariosRef, orderByChild("ci"), equalTo(ci)); // Buscar por "ci"
+          if (schedulesForDay) {
+            const scheduleForHour = schedulesForDay.find(schedule => schedule.horaI === hour);
+            //console.log(scheduleForHour);
+            // Si hay un horario, mostrar la materia y el profesor
+            if (scheduleForHour) {
+                // Crear un td con el contenido de tu botón y la clase proporcionada
+                const buttonTd = document.createElement("td");
+                buttonTd.classList.add("block", "py-4", "bg-gray-50");
+                console.log(scheduleForHour)
+                // Crear el contenedor del grupo de botones
+                const buttonGroup = document.createElement("div");
+                buttonGroup.classList.add("relative");
+            
+                // Crear el botón principal
+                const button = document.createElement("button");
+                button.setAttribute("data-id", "-OIlyImOMr3CtQKr9qRB");
+                button.setAttribute("data-nombre", scheduleForHour.materia);
+                button.classList.add("w-full", "bg-gray-800", "hover:bg-gray-700", "focus:ring-4", "focus:outline-none", "focus:ring-gray-300", "text-white", "rounded-lg", "py-2.5", "h-20");
+            
+                // Crear el contenido de texto dentro del botón principal
+                const divText = document.createElement("div");
+                divText.classList.add("text-center", "rtl:text-right");
+            
+                const divContent = document.createElement("div");
+                divContent.classList.add("mt-1", "font-sans", "text-sm", "font-semibold");
+                divContent.textContent = scheduleForHour.materia;
+            
+                const subText = document.createElement("div");
+                subText.classList.add("mb-1", "text-xs", "font-thin");
+                subText.textContent = `Ing. ${scheduleForHour.idProfesor}`;
+            
+                divContent.appendChild(subText);
+                divText.appendChild(divContent);
+                button.appendChild(divText);
+            
+                // Crear el botón de tres puntos (icono) para abrir el modal
+                const dropdownButton = document.createElement("button");
+                dropdownButton.classList.add("absolute", "top-0", "right-0", "text-white", "bg-transparent", "hover:bg-gray-700", "focus:ring-4", "focus:outline-none", "focus:ring-gray-300", "rounded", "p-2", "text-lg");
+                dropdownButton.innerHTML = `
+                    <i class='bx bx-edit-alt'></i>
+                `;
+            
+                // Asignar el evento al botón de tres puntos para abrir el modal
+                dropdownButton.addEventListener("click", function (event) {
+                    event.stopPropagation(); // Evita que el clic afecte al botón
+                    const datos = {
+                        materia: button.getAttribute("data-nombre"),
+                        idProfesor: button.getAttribute("data-id")
+                    };
+                    abrirModal(datos);
 
-            // Ejecutar la consulta
-            return get(consulta)
-                .then((snapshot) => {
-                    if (snapshot.exists()) {
-                        console.log("Usuario encontrado:", snapshot.val()); // Mostrar los datos encontrados
-                        return true; // Si se encuentra el usuario, retorna true
-                    } else {
-                        console.log("No se encontró ningún usuario con ese CI."); // Para depuración
-                        return false; // Si no se encuentra, retorna false
-                    }
-                })
-                .catch((error) => {
-                    console.error("Error al buscar el usuario:", error);
-                    return false; // Retorna false si hay un error en la consulta
                 });
-        }
-        //======= FUNCION PARA OBTENER USUARIOS ========//
-        function obtenerUsuarios() {
-            const db = getDatabase();
-            const usuariosRef = ref(db, "usuarios"); // Referencia a la colección de usuarios
-
-            // Obtener todos los usuarios
-            get(usuariosRef)
-                .then((snapshot) => {
-                    if (snapshot.exists()) {
-                        // Llamar a la función para mostrar los usuarios en la tabla
-                        mostrarUsuarios(snapshot.val());
-                    } else {
-                        console.log("No hay usuarios registrados.");
-                    }
-                })
-                .catch((error) => {
-                    console.error("Error al obtener usuarios:", error);
-                });
-        }
-        //==== FUNCION PARA MOSTRAR A LOS USUARIOS ====//
-        function mostrarUsuarios(usuarios) {
-            const tabla = document.getElementById("tablaUsuarios"); // Referencia a la tabla HTML
-            tabla.innerHTML = ""; // Limpiar la tabla antes de agregar nuevos datos
-
-            // Crear la cabecera de la tabla
-            const header = `<thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-                    <tr>
-                        <th scope="col" class="px-6 py-3">
-                            Nro
-                        </th>
-                        <th scope="col" class="px-6 py-3">
-                            Apellido Paterno
-                        </th>
-                        <th scope="col" class="px-6 py-3">
-                            Apellido Materno
-                        </th>
-                        <th scope="col" class="px-6 py-3">
-                            Nombres
-                        </th>
-                        <th scope="col" class="px-6 py-3">
-                            CI
-                        </th>
-                        <th scope="col" class="px-6 py-3">
-                            Rol
-                        </th>
-                        <th scope="col" class="px-6 py-3">
-                            Opciones
-                        </th>
-                    </tr>
-                </thead>`;
-            tabla.innerHTML += header;
-            // Convertir los usuarios a un arreglo de objetos
-            const usuariosArray = Object.values(usuarios);
-
-            // Ordenar los usuarios por apellidos (alfabéticamente)
-            usuariosArray.sort((a, b) => {
-                if (a.apellidos.toLowerCase() < b.apellidos.toLowerCase()) {
-                    return -1;
-                }
-                if (a.apellidos.toLowerCase() > b.apellidos.toLowerCase()) {
-                    return 1;
-                }
-                return 0;
-            });
-
-            // Iterar sobre los usuarios y crear las filas de la tabla
-            let i = 1;
-            usuariosArray.forEach((usuario) => {
-                const row = `
-                    <tr
-                        class="border-b border-gray-200 odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 dark:border-gray-700">
-                        <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                            ${i}
-                        </th>
-                        <td class="px-6 py-4">
-                            ${usuario.apellidos}
-                        </td>
-                        <td class="px-6 py-4">
-                            ${usuario.apellidos}
-                        </td>
-                        <td class="px-6 py-4">
-                            ${usuario.nombres}
-                        </td>
-                        <td class="px-6 py-4">
-                            ${usuario.ci}
-                        </td>
-                        <td class="px-6 py-4">
-                            <span
-                                class="bg-yellow-100 text-yellow-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded-sm dark:bg-gray-700 dark:text-yellow-300 border border-yellow-300">${usuario.rol}</span>
-                        </td>
-                        <td class="px-6 py-4">
-                            <button type="button"
-                                class="text-blue-700 border border-blue-700 hover:bg-blue-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm p-2.5 text-center inline-flex items-center me-2 dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:focus:ring-blue-800 dark:hover:bg-blue-500 ">
-                                <i class='bx bx-edit-alt'></i>
-
-                            </button>
-                            <button type="button"
-                                class="text-red-700 border border-red-700 hover:bg-red-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm p-2.5 text-center inline-flex items-center me-2 btn-eliminar" data-ci="${usuario.ci}">
-                                <i class='bx bx-trash'></i>
-
-                            </button>
-                            <button type="button"
-                                class="text-slate-700 border border-slate-700 hover:bg-slate-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-slate-300 font-medium rounded-lg text-sm p-2.5 text-center inline-flex items-center me-2 btn-modal" data-ci="${usuario.ci}">
-                                <i class='bx bx-purchase-tag-alt'></i>
-
-                            </button>
-                        </td>
-                    </tr>`;
-                tabla.innerHTML += row;
-                i++;
+            
+                // Agregar el botón principal y el de tres puntos al grupo de botones
+                buttonGroup.appendChild(button);
+                buttonGroup.appendChild(dropdownButton);
+            
+                // Agregar el grupo de botones al td
+                buttonTd.appendChild(buttonGroup);
+            
+                // Agregar el td al contenedor (celda)
+                dayCell.appendChild(buttonTd);
             }
-            )
-        }
-
-        function abrirModal(ci) {
-            console.log("abrir modal")
-        }
-        // Agrega el evento a un elemento contenedor (delegación de eventos) esto nos funciona para cuando la tabla es generada de forma dinamica
-        document.getElementById("tablaUsuarios").addEventListener("click", function (event) {
-            if (event.target.closest(".btn-eliminar")) {
-                const ci = event.target.closest(".btn-eliminar").dataset.ci;
-                eliminarUsuario(ci);
-            }
-            if (event.target.closest(".btn-modal")) {
-                const ci = event.target.closest(".btn-modal").dataset.ci;
-                abrirModal(ci);
-            }
+            
+          }
+          
+          // Agregar la celda a la fila
+          row.appendChild(dayCell);
         });
+  
+        // Agregar la fila a la tabla
+        scheduleContainer.appendChild(row);
+      });
+    }).catch(error => {
+      console.error("Error al cargar los horarios:", error);
+    });
+  }
+  
 
-        // Función para eliminar un usuario de Firebase
-        function eliminarUsuario(ci) {
-            const db = getDatabase();
-            const usuariosRef = ref(db, "usuarios");
+  // Cargar el horario al cargar la página
+  window.onload = loadSchedule;
+  
+  function abrirModal(datos){
+    console.log("presionamos los 3 puntitos"+datos.idProfesor);
+    const modal = document.getElementById('default-modal');
+    const modalContent = modal.querySelector(".relative");
 
-            // Consulta para buscar el usuario por su CI
-            const consulta = query(usuariosRef, orderByChild("ci"), equalTo(ci));
+    modal.classList.remove("hidden");
+    modalContent.classList.remove("hidden"); // Asegúrate de que el contenido del modal también esté visible
 
-            get(consulta)
-                .then(snapshot => {
-                    if (snapshot.exists()) {
-                        const usuarioKey = Object.keys(snapshot.val())[0]; // Obtener la clave del usuario
-                        const usuarioAEliminarRef = ref(db, `usuarios/${usuarioKey}`);
+    // Opcional: centrar el modal en la pantalla si es necesario
+    modalContent.style.transform = 'translate(-50%, -50%)';
+    modalContent.style.position = 'absolute';
+    modalContent.style.top = '50%';
+    modalContent.style.left = '50%';
 
-                        // Eliminar el usuario
-                        remove(usuarioAEliminarRef)
-                            .then(() => {
-                                console.log("✅ Usuario eliminado con éxito");
-                                alert(" ✅ Usuario eliminado correctamente.");
-                                obtenerUsuarios();
-                            })
-                            .catch(error => console.error("Error al eliminar usuario:", error));
-                    } else {
-                        console.log("Usuario no encontrado.");
-                    }
-                })
-                .catch(error => console.error("Error en la consulta:", error));
+}
+
+  document.addEventListener("DOMContentLoaded", function () {
+    // Función que se ejecuta cuando cualquiera de los botones es presionado
+    function irAPaginaB(event) {
+        // Verificamos si el objetivo del clic es un botón con el atributo data-id
+        const boton = event.target.closest('button[data-id]'); // Buscar el botón que fue presionado
+        if (boton) {
+            const dato = boton.getAttribute("data-id"); // Obtener el valor de data-id del botón presionado
+            const nombre = boton.getAttribute("data-nombre"); // Obtener el valor de data-nombre
+            sessionStorage.setItem("idHorario", dato); // Guardar en sessionStorage
+            sessionStorage.setItem("nombreHorario", nombre); // Guardar nombre de la materia en sessionStorage
+
+            // Redirigir a la página B
+            window.location.href = "clase.html"; // Aquí pones la ruta de la página B
         }
+    }
+    
 
-
-    </script>
+    // Asignar el evento de clic a los botones generados dinámicamente
+    document.body.addEventListener("click", irAPaginaB);
+});
