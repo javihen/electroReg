@@ -371,15 +371,15 @@
                                 <label for="horaI" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Periodo</label>
                                 <select id="horaI" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                                     <option selected>Seleccione el periodo</option>
-                                    <option value="1">1️⃣ - 🕓 07:30 a 09:00</option>
-                                    <option value="2">2️⃣ - 🕓 09:00 a 10:30</option>
-                                    <option value="3">3️⃣ - 🕓 10:30 a 12:00</option>
-                                    <option value="4">4️⃣ - 🕓 12:00 a 13:30</option>
-                                    <option value="5">5️⃣ - 🕓 13:30 a 15:00</option>
-                                    <option value="6">1️⃣ - 🕓 16:00 a 17:30</option>
-                                    <option value="7">2️⃣ - 🕠 17:30 a 19:00</option>
-                                    <option value="8">3️⃣ - 🕖 19:00 a 20:30</option>
-                                    <option value="9">4️⃣ - 🕣 20:30 a 22:00</option>
+                                    <option value="07:30">1️⃣ - 🕓 07:30 a 09:00</option>
+                                    <option value="09:00">2️⃣ - 🕓 09:00 a 10:30</option>
+                                    <option value="10:30">3️⃣ - 🕓 10:30 a 12:00</option>
+                                    <option value="12:00">4️⃣ - 🕓 12:00 a 13:30</option>
+                                    <option value="13:30">5️⃣ - 🕓 13:30 a 15:00</option>
+                                    <option value="16:00">1️⃣ - 🕓 16:00 a 17:30</option>
+                                    <option value="17:30">2️⃣ - 🕠 17:30 a 19:00</option>
+                                    <option value="19:00">3️⃣ - 🕖 19:00 a 20:30</option>
+                                    <option value="20:30">4️⃣ - 🕣 20:30 a 22:00</option>
                                 </select>
                             </div>
                         </div>
@@ -391,8 +391,9 @@
             </div>
             <!-- Modal footer -->
             <div class="flex items-center p-4 md:p-5 border-t border-gray-200 rounded-b dark:border-gray-600">
-                <button data-modal-hide="default-modal" type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Guardar</button>
-                <button data-modal-hide="default-modal" type="button" class="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">Cancelar</button>
+                <button id="actualizar" onclick="guardarCambios()" data-modal-hide="default-modal" type="button" class="hidden text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Actualizar</button>
+                <button id="guardar" onclick="guardar()" data-modal-hide="default-modal" type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Guardar</button>
+                <button data-modal-hide="default-modal" type="button" class="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 ">Cancelar</button>
             </div>
         </div>
     </div>
