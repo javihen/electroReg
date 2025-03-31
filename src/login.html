@@ -6,7 +6,7 @@
     <title>Iniciar sesion</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
+<body class="">
     <div class="h-screen bg-gradient-to-r from-[#5B7FFF] to-[#33CCFC]">
         
         <div class=" h-full grid place-content-center shadow-md">
@@ -16,17 +16,15 @@
                     <img src="icon.png" alt="" class="mx-auto w-32 mt-3 rounded-full">
                 </div>
                 
-                <div class="text-field">
-                    <label for="user">Usuario</label>
-                    <input type="text" id="user" name="user">
+                <div class="text-field px-7 flex flex-col">
+                    <label for="user" class="text-sm mx-2 relative top-8 left-2">Usuario</label>
+                    <input type="text" id="user" name="user" class="bg-slate-300 px-2 py-1 h-10 rounded">
                 </div>
                 <button type="submit" class="my-form__button">
                     Ingresar
                 </button>
             </div>
         </div>
-
-
     </div>
 </body>
 </html>
