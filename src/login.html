@@ -1,30 +1,45 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Iniciar sesion</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
+
 <body class="">
     <div class="h-screen bg-gradient-to-r from-[#5B7FFF] to-[#33CCFC]">
-        
-        <div class=" h-full grid place-content-center shadow-md">
-            <div class="w-[400px] h-[500px] bg-white rounded">
-                <div class="text-center w-full mt-7 font-semibold text-2xl">Iniciar sesion</div>
+
+        <div class="grid h-full shadow-md place-content-center">
+            <div class="w-[400px] h-[500px] bg-white rounded text-center shadow-md">
+                <div class="w-full text-2xl font-semibold text-center mt-7">Iniciar sesion</div>
                 <div class="">
-                    <img src="icon.png" alt="" class="mx-auto w-32 mt-3 rounded-full">
+                    <img src="icon.png" alt="" class="w-32 mx-auto mt-3 rounded-full">
                 </div>
-                
-                <div class="text-field px-7 flex flex-col">
-                    <label for="user" class="text-sm mx-2 relative top-8 left-2">Usuario</label>
-                    <input type="text" id="user" name="user" class="bg-slate-300 px-2 py-1 h-10 rounded">
+
+                <div class="flex flex-col mt-4 text-field px-7">
+                    <label for="user" class="mx-2 mb-1 text-sm ">Usuario</label>
+                    <input type="text" id="user" name="user" class="h-10 px-4 py-1 text-center rounded bg-slate-300">
                 </div>
-                <button type="submit" class="my-form__button">
+
+                <div class="flex flex-col mt-2 text-field px-7">
+                    <label for="user" class="mx-2 mb-1 text-sm ">Contrasena</label>
+                    <input type="password" id="user" name="user"
+                        class="h-10 px-4 py-1 text-center rounded bg-slate-300">
+                </div>
+
+                <button type="submit" class="py-2 mt-6 text-white bg-blue-500 rounded px-14 w-fit hover:bg-blue-600">
                     Ingresar
                 </button>
+
+                <p class="p-2 my-4 text-xs">Para poder ingresar al sistema debe estar registrado, con la autorizacion
+                    del
+                    administrador,
+                    de esta forma usted obtendra sus credenciales. Disculpe las molestias!.</p>
             </div>
         </div>
     </div>
 </body>
+
 </html>
