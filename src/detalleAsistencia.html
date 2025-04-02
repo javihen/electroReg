@@ -265,6 +265,8 @@
     <script src="../node_modules/flowbite/dist/flowbite.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/flowbite@3.1.1/dist/flowbite.min.js"></script>
     <script src="../node_modules/flowbite/dist/flowbite.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
         import { getDatabase, ref, set, get, push, query, orderByChild, equalTo, remove, startAt, endAt } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
@@ -348,7 +350,7 @@
             tablaUsuarios.innerHTML = ""; // Limpiar la tabla antes de agregar nuevas filas
 
             lista.forEach(usuario => {
-                let fila = `<tr class="bg-white border-b border-gray-200 dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                let fila = `<tr class="bg-white border-b border-gray-200 hover:bg-gray-50 ">
                         <td class="px-6 py-4 text-right">
                             <button type="button" data-ci="${usuario.ci}" onclick="capturarAsistencia(this)" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center">
                                 ${usuario.apellidos + ' ' + usuario.nombres}
@@ -399,13 +401,25 @@
                 });
 
                 if (asistenciaExiste) {
-                    alert("Ya existe una asistencia registrada para este usuario en esta fecha.");
+                    //alert("Ya existe una asistencia registrada para este usuario en esta fecha.");
+                    Swal.fire({
+                        title: "Ya existe una asistencia registrada para este usuario en esta fecha!",
+                        icon: "error",
+                        draggable: true,
+                        timer: 1500
+                    });
                 } else {
                     // Guardar la asistencia en Firebase
                     push(asistenciaRef, asistencia)
                         .then(() => {
                             obtenerAsistentes(database, fecha, idHorario);
-                            alert("Asistencia registrada con éxito.");
+                            //alert("Asistencia registrada con éxito.");
+                            Swal.fire({
+                                title: "Asistencia registrada con éxito!",
+                                icon: "success",
+                                draggable: true,
+                                timer: 1500
+                            });
                             document.getElementById("tablaUsuarios").innerHTML = "";
                             document.getElementById("busqueda").value = "";
                         })
