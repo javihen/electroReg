@@ -1,4 +1,5 @@
 
+
 // Configuración de Firebase
 const firebaseConfig = {
     apiKey: "AIzaSyC_Yl50SusdST7Gqal5UBahp97Y-5iqMzE",
@@ -168,7 +169,6 @@ function loadSchedule() {
     });
   }
   
-
   // Cargar el horario al cargar la página
   window.onload = loadSchedule;
   
@@ -301,4 +301,44 @@ window.guardarCambios = function() {
 
     // Asignar el evento de clic a los botones generados dinámicamente
     document.body.addEventListener("click", irAPaginaB);
+});
+
+
+document.getElementById('loginForm').addEventListener('submit', function (e) {
+  e.preventDefault();
+  const userinput = document.getElementById('usuario').value;
+  const claveinput = document.getElementById('password').value;
+  database.ref('usuarios').once('value', function (snapshot) {
+    let acceso = false;
+
+    snapshot.forEach(function (childSnapshot) {
+      const data = childSnapshot.val();
+      if (data.usuario === userinput && data.password === claveinput) {
+        acceso = true;
+      }
+    });
+    document.getElementById('usuario').value="";
+    document.getElementById('password').value="";
+    if (acceso) {
+      sessionStorage.setItem("usuarioLogueado", userinput);
+      Swal.fire({
+        icon: "success",
+        title: "Bienvenido, al Sistema ElectroReg",
+        showConfirmButton: false,
+        timer: 1500
+      });
+      // Espera 1 segundo y redirige
+      setTimeout(() => {
+        window.location.href = "panel.html";
+      }, 1000);
+      // Puedes redirigir, guardar en sessionStorage, etc.
+    } else {
+      Swal.fire({
+        icon: "error",
+        title: "intentalo de nuevo!",
+        showConfirmButton: false,
+        timer: 1500
+      });
+    }
+  });
 });
