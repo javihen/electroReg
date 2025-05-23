@@ -496,10 +496,7 @@
                             Nro
                         </th>
                         <th scope="col" class="px-6 py-3">
-                            Apellido Paterno
-                        </th>
-                        <th scope="col" class="px-6 py-3">
-                            Apellido Materno
+                            Apellidos
                         </th>
                         <th scope="col" class="px-6 py-3">
                             Nombres
@@ -518,13 +515,16 @@
             tabla.innerHTML += header;
             // Convertir los usuarios a un arreglo de objetos
             const usuariosArray = Object.values(usuarios);
-
+            console.log(usuariosArray)
             // Ordenar los usuarios por apellidos (alfabéticamente)
             usuariosArray.sort((a, b) => {
-                if (a.apellidos.toLowerCase() < b.apellidos.toLowerCase()) {
+                const apellidoA = (a.apellidos || "").toLowerCase();
+                const apellidoB = (b.apellidos || "").toLowerCase();
+
+                if (apellidoA < apellidoB) {
                     return -1;
                 }
-                if (a.apellidos.toLowerCase() > b.apellidos.toLowerCase()) {
+                if (apellidoA > apellidoB) {
                     return 1;
                 }
                 return 0;
@@ -539,9 +539,7 @@
                         <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                             ${i}
                         </th>
-                        <td class="px-6 py-4">
-                            ${usuario.apellidos}
-                        </td>
+
                         <td class="px-6 py-4">
                             ${usuario.apellidos}
                         </td>
@@ -632,10 +630,10 @@
             window.location.href = "index.html";
         }
         function cerrarSesion() {
-        sessionStorage.removeItem("usuarioLogueado");
-        window.location.href = "index.html";
-      }
-        </script>
+            sessionStorage.removeItem("usuarioLogueado");
+            window.location.href = "index.html";
+        }
+    </script>
 
 </body>
 
