@@ -68,7 +68,7 @@
                 <ul
                     class="flex flex-col p-4 mt-4 font-medium border border-gray-100 rounded-lg md:p-0 bg-gray-50 md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0 md:bg-white dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700">
                     <li>
-                        <a href="index.html"
+                        <a href="panel.html"
                             class="block px-3 py-2 text-gray-900 rounded-sm hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700">Horario</a>
                     </li>
                     <li>
@@ -115,19 +115,19 @@
                             Nro.
                         </th>
                         <th scope="col" class="px-6 py-3">
-                            Cantidad
+                            Nro Componente
                         </th>
                         <th scope="col" class="px-6 py-3">
-                            Equipo
+                            Nombre Equipo
                         </th>
                         <th scope="col" class="px-6 py-3">
                             Marca
                         </th>
                         <th scope="col" class="px-6 py-3">
-                            Caracteristicas
+                            Observaciones
                         </th>
                         <th scope="col" class="px-6 py-3">
-                            Observaciones
+                            Estado
                         </th>
                         <th scope="col" class="px-6 py-3">
                             Opciones
@@ -210,21 +210,22 @@
                 <form class="p-4 md:p-5" id="userForm">
                     <div class="grid grid-cols-2 gap-4 mb-4">
                         <div class="col-span-2 sm:col-span-1">
-                            <label for="cantidad"
-                                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Cantidad</label>
-                            <input type="number" name="cantidad" id="cantidad"
+                            <label for="nroComponente"
+                                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nro de
+                                equipo </label>
+                            <input type="number" name="nroComponente" id="nroComponente"
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                                 required="">
                         </div>
                         <div class="col-span-2 sm:col-span-1">
-                            <!-- <label for="rol"
-                                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Rol</label>
-                            <select id="rol" name="rol"
+                            <label for="rol"
+                                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Estado</label>
+                            <select id="estado" name="estado"
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
-                                <option selected="">Selecciona el rol</option>
-                                <option value="estudiante">Estudiante</option>
-                                <option value="docente">Docente</option>
-                            </select> -->
+                                <option selected=""> -- Selecciona -- </option>
+                                <option value="FUNCIONAL">FUNCIONAL</option>
+                                <option value="NO FUNCIONAL">NO FUNCIONAL</option>
+                            </select>
                         </div>
                         <div class="col-span-2">
                             <label for="nombre"
@@ -243,7 +244,7 @@
                         </div>
                         <div class="col-span-2">
                             <label for="caracteristica"
-                                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Caracteristicas</label>
+                                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Observaciones</label>
                             <textarea type="text" name="caracteristica" id="caracteristica"
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                                 required="">
@@ -446,19 +447,19 @@
                             Nro.
                         </th>
                         <th scope="col" class="px-6 py-3">
-                            Cantidad
+                            nro Componente
                         </th>
                         <th scope="col" class="px-6 py-3">
-                            Equipo
+                            Nombre equipo
                         </th>
                         <th scope="col" class="px-6 py-3">
                             Marca
                         </th>
                         <th scope="col" class="px-6 py-3">
-                            Caracteristicas
+                            Observaciones
                         </th>
                         <th scope="col" class="px-6 py-3">
-                            Observaciones
+                            Estado
                         </th>
                         <th scope="col" class="px-6 py-3">
                             Opciones
@@ -479,13 +480,12 @@
                     const row = `
                     <tr class="text-center">
                         <td>${i}</td>
-                        <td>${usuario.cantidad}</td>
+                        <td><span
+                                class="bg-yellow-100 text-yellow-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded-sm border border-yellow-400">${usuario.nroComponente}</span></td>
                         <td>${usuario.nombre}</td>
                         <td>${usuario.marca}</td>
-                        <td>${usuario.caracteristica}</td>
-                        <td><span
-                                class="bg-green-100 text-green-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded-sm dark:bg-gray-700 dark:text-green-400 border border-green-400">${usuario.estado}</span>
-                        </td>
+                        <td>${usuario.observacion}</td>
+                        <td><span class="bg-slate-100 text-slate-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded-sm border border-slate-400">${usuario.estado}</span></td>
                         <td>
                             <button
                                 class="text-white bg-red-700 hover:bg-red-800 focus:outline-none focus:ring-4 focus:ring-red-200 font-medium rounded-full text-sm px-3 py-2.5 me-2 mb-2 btn-eliminar"
@@ -501,14 +501,15 @@
                 )
         }
 
-        //=========== FUNCION AGREGAR USUARIO ==========//
+        //=========== FUNCION AGREGAR COMPONENTE ==========//
         function agregarUsuario(event) {
             event.preventDefault();
 
-            const cantidad = document.getElementById("cantidad").value;
+            const nroComponente = document.getElementById("nroComponente").value;
             const nombre = document.getElementById("nombre").value;
             const marca = document.getElementById("marca").value;
             const caracteristica = document.getElementById("caracteristica").value;
+            const estado = document.getElementById("estado").value;
 
             buscarUsuarioPorCI(nombre).then((existeComponente) => {
                 if (!existeComponente) {
@@ -517,12 +518,11 @@
                     const nuevoComponenteRef = push(componentesRef); // Crea un ID único automáticamente
 
                     set(nuevoComponenteRef, {
-                        cantidad: cantidad,
+                        nroComponente: nroComponente,
                         nombre: nombre,
                         marca: marca,
-                        caracteristica: caracteristica,
-                        estado: "FUNCIONAL",
-                        observacion: "NINGUNA"
+                        estado: estado,
+                        observacion: caracteristica
                     })
                         .then(() => {
                             alert("✅ componente agregado correctamente.");
