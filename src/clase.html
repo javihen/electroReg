@@ -4,7 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="./output.css" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
 
 
@@ -285,9 +286,9 @@
                                 placeholder=" ">
                         </div>
 
-                        <hr class=" mb-4 ">
+                        <hr class="mb-4 ">
 
-                        <div class=" col-span-2 ">
+                        <div class="col-span-2 ">
                                 <input type=" text" name="busqueda" id="busqueda" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 
                                 placeholder=" Apellidos o CI">
                         </div>
@@ -349,7 +350,9 @@
 
         document.addEventListener("DOMContentLoaded", function () {
             // Llamar a la función cuando se cargue la página
-
+            function prestamos() {
+                alert("Hicimos click en prestamos")
+            }
             window.onload = function () {
                 obtenerAsistencias();
                 setFechaActual();
@@ -533,6 +536,10 @@
                                             class="text-white bg-green-700 hover:bg-green-800 focus:outline-none focus:ring-4 focus:ring-green-300 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2 ">
                                         <i class='bx bxs-download'></i> Generar Excel
                                     </button>
+                                    <button type="button" id="btnPrestamo" onclick="prestamos()"
+                                            class="btnPrestamo text-white bg-orange-800 hover:bg-orange-900 focus:outline-none focus:ring-4 focus:ring-orange-300 font-medium rounded-full text-sm px-5 py-2.5 me-2 mb-2 ">
+                                        <i class='bx bx-cube-alt'></i> Prestamos
+                                    </button>
                                 </td>
                             </tr>`;
                             contador++;
@@ -563,6 +570,8 @@
                                 window.location.href = `detalleAsistencia.html?fecha=${encodeURIComponent(fecha)}&horario=${encodeURIComponent(horario)}&nombreMateria=${encodeURIComponent(nombreMateria)}`;
                             }
                         });
+
+
                     } else {
                         console.log("No se encontraron datos");
                     }

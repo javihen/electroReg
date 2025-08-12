@@ -7,11 +7,15 @@
     <!-- <link href="./output.css" rel="stylesheet"> -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
-    <title>.: Componentes :.</title>
+    <title>.: Prestamo :.</title>
+
 </head>
 
 <body>
-    <nav class="bg-white border-gray-200 dark:bg-gray-900">
+    <div class="fixed inset-0 z-0 bg-[url('/src/assets/patron2.avif')] bg-repeat pointer-events-none opacity-20">
+    </div>
+    <!-- ...existing code... -->
+    <nav class="relative z-10 border-gray-200 dark:bg-gray-900">
         <div class="flex flex-wrap items-center justify-between max-w-screen-xl p-4 mx-auto">
             <a href="https://flowbite.com/" class="flex items-center space-x-3 rtl:space-x-reverse">
                 <img src="logo.png" class="h-8" alt="Flowbite Logo" />
@@ -91,16 +95,17 @@
             </div>
         </div>
     </nav>
-    <div class="p-10">
+
+    <div class="relative p-10 z-100">
         <div class="w-full mb-5 text-xl font-bold text-center text-red-600">Solicitud de material para practicas en el
             Laboratorio de Electronica</div>
         <div class="flex flex-row justify-between">
-            <table class="w-full">
+            <table class="w-full ">
                 <tr>
                     <td>Nombre: </td>
                     <td colspan="3">
                         <div id="nombre"
-                            class="inline-flex items-center px-5 py-2.5 text-sm font-medium text-center text-green-700 border border-green-700 rounded-lg  focus:ring-4 focus:outline-none focus:ring-green-300 ">
+                            class="inline-flex items-center px-5 py-2.5 text-sm font-medium text-center text-green-700 border border-green-700 rounded-lg focus:ring-4 focus:outline-none focus:ring-green-300 bg-white">
                             .: Jaimito Eduardo Escalante Dominguez - Gestion 2025 :.
                         </div>
                     </td>
@@ -111,14 +116,14 @@
                     <td>Materia: </td>
                     <td>
                         <div id="materia"
-                            class="inline-flex items-center px-5 py-2.5 text-sm font-medium text-center text-green-700 border border-green-700 rounded-lg  focus:ring-4 focus:outline-none focus:ring-green-300">
+                            class="inline-flex items-center px-5 py-2.5 text-sm font-medium text-center text-green-700 border border-green-700 rounded-lg  focus:ring-4 focus:outline-none focus:ring-green-300 bg-white">
                             .: Sistemas de control y laboratorio :.
                         </div>
                     </td>
                     <td>Fecha: </td>
                     <td>
                         <div id="fecha"
-                            class="inline-flex items-center px-5 py-2.5 text-sm font-medium text-center text-pink-700 border border-pink-700 rounded-lg  focus:ring-4 focus:outline-none focus:ring-pink-300">
+                            class="inline-flex items-center px-5 py-2.5 text-sm font-medium text-center text-pink-700 border border-pink-700 rounded-lg  focus:ring-4 focus:outline-none focus:ring-pink-300 bg-white">
                             Lunes 5 de Septiembre de 2025
                         </div>
                     </td>
@@ -161,7 +166,7 @@
 
                             </tr>
                         </thead>
-                        <tbody id="tablaBody">
+                        <tbody id="tablaBody" class="bg-white">
                             <!-- <tr class="bg-white border-b border-gray-200 ">
                                 <td class="px-6 py-4 text-center" colspan="6">
                                     🚫 No existen datos de componentes
@@ -225,7 +230,7 @@
             </div>
         </div>
     </div>
-    <footer class="m-4 bg-white rounded-lg shadow-sm dark:bg-gray-900">
+    <footer class="z-10 m-4 bg-white rounded-lg shadow-sm dark:bg-gray-900">
         <div class="w-full max-w-screen-xl p-4 mx-auto md:py-8">
             <div class="sm:flex sm:items-center sm:justify-between">
                 <a href="https://flowbite.com/" class="flex items-center mb-4 space-x-3 sm:mb-0 rtl:space-x-reverse">
@@ -943,10 +948,10 @@
             window.location.href = "index.html";
         }
         function cerrarSesion() {
-        sessionStorage.removeItem("usuarioLogueado");
-        window.location.href = "index.html";
-      }
-        </script>
+            sessionStorage.removeItem("usuarioLogueado");
+            window.location.href = "index.html";
+        }
+    </script>
 </body>
 
 </html>
