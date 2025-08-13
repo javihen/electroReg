@@ -171,7 +171,7 @@
                                 <td class="px-6 py-4 text-center" colspan="6">
                                     🚫 No existen datos de componentes
                                 </td>
-                            </tr> -->
+                            </tr> 
                             <tr class="text-center">
                                 <td>2</td>
                                 <td>Fuente de energia</td>
@@ -192,26 +192,7 @@
                                     </button>
                                 </td>
                             </tr>
-                            <tr class="text-center">
-                                <td>2</td>
-                                <td>Fuente de energia</td>
-                                <td>INEEIn</td>
-                                <td><span
-                                        class="bg-green-100 text-green-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded-sm border border-green-400">Devuelto</span>
-                                </td>
-                                <td>
-                                    <button type="button"
-                                        class="text-blue-700 border border-blue-700 hover:bg-blue-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm p-2.5 text-center inline-flex items-center me-2 m-2">
-                                        <i class='bx bx-edit-alt'></i>
-                                        <span class="sr-only">Editar prestamo</span>
-                                    </button>
-                                    <button type="button"
-                                        class="text-red-700 border border-red-700 hover:bg-red-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm p-2.5 text-center inline-flex items-center me-2 ">
-                                        <i class='bx bx-trash'></i>
-                                        <span class="sr-only">Eliminar prestamo</span>
-                                    </button>
-                                </td>
-                            </tr>
+            -->
 
                         </tbody>
                         <tr>
@@ -531,15 +512,15 @@
                     }
 
                     tablaBody.innerHTML += `
-                        <tr class="text-center">
-                            <td>${nro}</td>
+                        <tr class="text-center border border-t-slate-500 ">
+                            <td class="py-4">${nro}</td>
                             <td>${nombre}</td>
                             <td>${marca}</td>
                             <td>
                                 <span class="bg-${estado === "Prestado" ? "red" : "green"}-100 text-${estado === "Prestado" ? "red" : "green"}-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded-sm border border-${estado === "Prestado" ? "red" : "green"}-400">${estado}</span>
                             </td>
                             <td>
-                                <button type="button" class="text-red-700 border border-red-700 hover:bg-red-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm p-2.5 text-center inline-flex items-center btn-eliminar-prestamo" data-prestamo-key="${prestamoKey}">
+                                <button type="button" class="text-red-700 border border-red-700 hover:bg-red-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm p-2.5 text-center inline-flex items-center me-2 " data-prestamo-key="${prestamoKey}">
                                     <i class='bx bx-trash'></i>
                                     <span class="sr-only">Eliminar préstamo</span>
                                 </button>
@@ -574,125 +555,6 @@
         });
 
 
-
-        document.getElementById("busqueda").addEventListener("input", async function () {
-            const usuariosRef = ref(database, "usuarios");
-            let filtro = this.value.toUpperCase();
-
-            if (filtro === "") {
-                mostrarResultados([]); // Si el input está vacío, limpia la tabla
-                return;
-            }
-
-            //console.log("Buscando:", filtro); // Verificar en consola
-
-            // Hacer consultas separadas para "ci" y "apellidos"
-            const consultaCi = query(usuariosRef, orderByChild("ci"), startAt(filtro), endAt(filtro + "\uf8ff"));
-            const consultaApellidos = query(usuariosRef, orderByChild("apellidos"), startAt(filtro), endAt(filtro + "\uf8ff"));
-
-            try {
-                const snapshotCi = await get(consultaCi); // Obtener resultados de "ci"
-                const snapshotApellidos = await get(consultaApellidos); // Obtener resultados de "apellidos"
-
-                let listaUsuarios = [];
-
-                // Procesar los resultados de "ci"
-                snapshotCi.forEach(childSnapshot => {
-                    let usuario = childSnapshot.val();
-                    listaUsuarios.push(usuario);
-                });
-
-                // Procesar los resultados de "apellidos"
-                snapshotApellidos.forEach(childSnapshot => {
-                    let usuario = childSnapshot.val();
-                    listaUsuarios.push(usuario);
-                });
-
-                // Eliminar duplicados si es necesario (por ejemplo, un usuario puede estar en ambas búsquedas)
-                listaUsuarios = Array.from(new Set(listaUsuarios.map(a => a.ci))).map(ci => {
-                    return listaUsuarios.find(a => a.ci === ci);
-                });
-
-                mostrarResultados(listaUsuarios); // Mostrar los resultados combinados
-
-            } catch (error) {
-                console.error("Error al buscar:", error);
-            }
-        });
-
-        // Función para mostrar los resultados en la tabla
-        function mostrarResultados(lista) {
-            let tablaUsuarios = document.getElementById("tablaUsuarios");
-            tablaUsuarios.innerHTML = ""; // Limpiar la tabla antes de agregar nuevas filas
-
-            lista.forEach(usuario => {
-                let fila = `<tr class="bg-white border-b border-gray-200 dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-                        <td class="px-6 py-4 text-right">
-                            <button type="button" data-ci="${usuario.ci}" onclick="capturarAsistencia(this)" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center">
-                                ${usuario.apellidos + ' ' + usuario.nombres}
-                            </button>
-                        </td>
-                    </tr>`;
-                tablaUsuarios.innerHTML += fila;
-            });
-
-            // Si no hay resultados, mostrar mensaje
-            if (lista.length === 0) {
-                tablaUsuarios.innerHTML = `<tr class="bg-white border-b border-gray-200 dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"><td class="px-6 py-4 text-right" colspan="2">No se encontraron usuarios</td></tr>`;
-            }
-        }
-
-        document.addEventListener("DOMContentLoaded", function () {
-            // Llamar a la función cuando se cargue la página
-
-            //------------- REGISTRAR LA ASISTENCIA -------------//
-            window.capturarAsistencia = function (boton) {
-                const ci = boton.getAttribute("data-ci");
-                const fechaSeleccionada = fecha;
-                const idHorario = sessionStorage.getItem("idHorario");
-
-                registrarAsistencia(ci, fechaSeleccionada, idHorario);
-            }
-            async function registrarAsistencia(ci, fecha, idHorario) {
-                const db = getDatabase();  // Obtener la base de datos
-                const asistenciaRef = ref(db, 'asistencias');  // Referencia a la colección "asistencias"
-
-                // Crear el objeto de la asistencia
-                const asistencia = {
-                    ci: ci,
-                    fecha: fecha,
-                    idMateria: idHorario,
-                };
-
-                const consulta = query(asistenciaRef, orderByChild("ci"), equalTo(ci));
-                const snapshot = await get(consulta);
-
-                let asistenciaExiste = false;
-
-                snapshot.forEach((childSnapshot) => {
-                    const asistencia = childSnapshot.val();
-                    if (asistencia.fecha === fecha && asistencia.idMateria === idHorario) {
-                        asistenciaExiste = true;
-                    }
-                });
-
-                if (asistenciaExiste) {
-                    alert("Ya existe una asistencia registrada para este usuario en esta fecha.");
-                } else {
-                    // Guardar la asistencia en Firebase
-                    push(asistenciaRef, asistencia)
-                        .then(() => {
-                            obtenerAsistentes(database, fecha, idHorario);
-                            alert("Asistencia registrada con éxito.");
-                            document.getElementById("tablaUsuarios").innerHTML = "";
-                            document.getElementById("busqueda").value = "";
-                        })
-                        .catch((error) => {
-                            console.error("Error al registrar la asistencia:", error);
-                        });
-                }
-            }
-        });
 
 
         // Función para obtener json
