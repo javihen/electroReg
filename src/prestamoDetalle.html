@@ -293,13 +293,6 @@
                 <!-- Modal body -->
                 <form class="p-4 md:p-5">
                     <div class="grid grid-cols-2 gap-4 mb-4">
-                        <!-- <div class="col-span-2 ">
-                            <input type="date" name="fecha" id="fecha" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 
-                        placeholder=" ">
-                        </div>
-
-                        <hr class="mb-4 "> -->
-
                         <div class="col-span-2 ">
                             <input type=" text" name="" id="numeroComponente"
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5">
@@ -476,6 +469,8 @@
                 document.getElementById("datosComponente").textContent = "";
                 document.getElementById("imagenComponente").innerHTML = "";
 
+                mostrarPrestamosUsuario();
+
                 // Opcional: cerrar el modal si usas Flowbite o similar
                 // document.querySelector('[data-modal-toggle="crud-modal"]').click();
             } catch (error) {
@@ -484,8 +479,99 @@
             }
         });
 
+        // ...dentro del <script type="module">...
 
+        // 1️⃣ Función para mostrar los préstamos filtrados en la tabla
+        async function mostrarPrestamosUsuario() {
+            const prestamosRef = ref(database, "prestamos");
+            const tablaBody = document.getElementById("tablaBody");
+            tablaBody.innerHTML = `<tr><td colspan="5" class="py-4 text-center">Cargando...</td></tr>`;
 
+            // Obtener todos los préstamos
+            const snapshot = await get(prestamosRef);
+            if (!snapshot.exists()) {
+                tablaBody.innerHTML = `<tr><td colspan="5" class="py-4 text-center">No existen préstamos registrados.</td></tr>`;
+                return;
+            }
+
+            // Filtrar por ci, fecha y materia
+            const prestamos = [];
+            snapshot.forEach(child => {
+                const p = child.val();
+                if (p.ci === ci && p.fecha === fecha && p.materia === materia) {
+                    prestamos.push(p);
+                }
+            });
+
+            if (prestamos.length === 0) {
+                tablaBody.innerHTML = `<tr><td colspan="5" class="py-4 text-center">No existen préstamos para este usuario.</td></tr>`;
+                return;
+            }
+
+            // Para cada préstamo, obtener info del componente
+            tablaBody.innerHTML = ""; // Limpiar tabla
+            // ...dentro de mostrarPrestamosUsuario()...
+            for (const prestamoKey in snapshot.val()) {
+                const p = snapshot.val()[prestamoKey];
+                if (p.ci === ci && p.fecha === fecha && p.materia === materia) {
+                    // Buscar el componente por nroComponente
+                    const componentesRef = ref(database, "componentes");
+                    const consultaComponente = query(componentesRef, orderByChild("nroComponente"), equalTo(p.nroComponente));
+                    const snapComp = await get(consultaComponente);
+
+                    let nombre = "N/A", marca = "N/A", estado = "N/A", nro = "N/A";
+                    if (snapComp.exists()) {
+                        snapComp.forEach(childComp => {
+                            const comp = childComp.val();
+                            nombre = comp.nombre || "N/A";
+                            marca = comp.marca || "N/A";
+                            estado = comp.estado || "N/A";
+                            nro = comp.nroComponente || "N/A";
+                        });
+                    }
+
+                    tablaBody.innerHTML += `
+                        <tr class="text-center">
+                            <td>${nro}</td>
+                            <td>${nombre}</td>
+                            <td>${marca}</td>
+                            <td>
+                                <span class="bg-${estado === "Prestado" ? "red" : "green"}-100 text-${estado === "Prestado" ? "red" : "green"}-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded-sm border border-${estado === "Prestado" ? "red" : "green"}-400">${estado}</span>
+                            </td>
+                            <td>
+                                <button type="button" class="text-red-700 border border-red-700 hover:bg-red-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm p-2.5 text-center inline-flex items-center btn-eliminar-prestamo" data-prestamo-key="${prestamoKey}">
+                                    <i class='bx bx-trash'></i>
+                                    <span class="sr-only">Eliminar préstamo</span>
+                                </button>
+                            </td>
+                        </tr>
+                    `;
+                }
+            }
+        }
+
+        // Delegación de eventos para eliminar préstamo
+        document.getElementById("tablaBody").addEventListener("click", async function (event) {
+            const btn = event.target.closest(".btn-eliminar-prestamo");
+            if (btn) {
+                const prestamoKey = btn.getAttribute("data-prestamo-key");
+                if (prestamoKey && confirm("¿Seguro que deseas eliminar este préstamo?")) {
+                    try {
+                        const prestamoRef = ref(database, "prestamos/" + prestamoKey);
+                        await remove(prestamoRef);
+                        mostrarPrestamosUsuario();
+                    } catch (error) {
+                        alert("Error al eliminar el préstamo.");
+                        console.error(error);
+                    }
+                }
+            }
+        });
+
+        // 2️⃣ Llamar a la función al cargar la página
+        document.addEventListener("DOMContentLoaded", function () {
+            mostrarPrestamosUsuario();
+        });
 
 
 
