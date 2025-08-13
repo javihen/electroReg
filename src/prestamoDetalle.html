@@ -274,7 +274,8 @@
                 <!-- Modal header -->
                 <div class="flex items-center justify-between p-4 border-b border-gray-200 rounded-t md:p-5 ">
                     <h3 class="text-lg font-semibold text-gray-900 ">
-                        Buscar usuario
+                        Buscar componente
+                        <p class="block text-xs text-slate-500">Digite el numero del componente para ser buscado</p>
                     </h3>
                     <button type="button"
                         class="inline-flex items-center justify-center w-8 h-8 text-sm text-gray-400 bg-transparent rounded-lg hover:bg-gray-200 hover:text-gray-900 ms-auto "
@@ -286,7 +287,9 @@
                         </svg>
                         <span class="sr-only">Close modal</span>
                     </button>
+
                 </div>
+
                 <!-- Modal body -->
                 <form class="p-4 md:p-5">
                     <div class="grid grid-cols-2 gap-4 mb-4">
@@ -298,33 +301,26 @@
                         <hr class="mb-4 "> -->
 
                         <div class="col-span-2 ">
-                            <input type=" text" name="busqueda" id="busqueda" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 
-                        placeholder=" Apellidos o CI">
+                            <input type=" text" name="" id="numeroComponente"
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5">
                         </div>
                     </div>
-                    <div class="">
-                        <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
-                            <table class="w-full text-sm text-left text-gray-500 rtl:text-right dark:text-gray-400">
-                                <thead
-                                    class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-                                    <tr>
-                                        <th scope="col" class="px-6 py-3">
-                                            Estudiante
-                                        </th>
 
-
-                                    </tr>
-                                </thead>
-                                <tbody id="tablaUsuarios">
-                                    <tr
-                                        class="bg-white border-b border-gray-200 dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-
-                                    </tr>
-                                </tbody>
-                            </table>
+                    <div class="grid grid-cols-2 gap-4 mb-4">
+                        <div id="datosComponente" class="mt-2 text-sm"></div>
+                        <div id="imagenComponente">
+                            <img src="assets/patron4.jpg" class="" alt="">
                         </div>
+                    </div>
+                    <!-- ...dentro del <form> del modal... -->
+                    <div class="flex justify-end col-span-2">
+                        <button type="button" id="btnGuardarPrestamo"
+                            class="px-4 py-2 text-white bg-green-700 rounded-lg hover:bg-green-800 focus:outline-none">
+                            Guardar préstamo
+                        </button>
                     </div>
                 </form>
+
             </div>
         </div>
     </div>
@@ -375,8 +371,124 @@
         console.log("materia:", materia);
         console.log("ci:", ci);
 
+        // Buscar usuario en Firebase por CI y mostrar por consola
+        if (ci) {
+            const usuariosRef = ref(database, "usuarios");
+            const consultaUsuario = query(usuariosRef, orderByChild("ci"), equalTo(ci));
+            get(consultaUsuario)
+                .then(snapshot => {
+                    if (snapshot.exists()) {
+                        snapshot.forEach(childSnapshot => {
+                            const usuario = childSnapshot.val();
+                            console.log("Datos del usuario encontrado:", usuario);
+                            document.getElementById("nombre").textContent = `.: ${usuario.nombres} ${usuario.apellidos} - Gestion 2025 :.`;
+                        });
+                    } else {
+                        console.log("No se encontró usuario con CI:", ci);
+                    }
+                })
+                .catch(error => {
+                    console.error("Error al buscar usuario:", error);
+                });
+        }
 
-        // Evento de búsqueda en tiempo real
+        if (materia) {
+            const horariosRef = ref(database, `horarios/${materia}`);
+            get(horariosRef)
+                .then(snapshot => {
+                    if (snapshot.exists()) {
+                        const horario = snapshot.val();
+                        console.log("Datos del horario encontrado:", horario);
+                        document.getElementById("materia").textContent = `.: ${horario.materia} - ${horario.idProfesor} :.`;
+                    } else {
+                        console.log("No se encontró horario con key:", materia);
+                    }
+                })
+                .catch(error => {
+                    console.error("Error al buscar horario:", error);
+                });
+        }
+
+
+        document.getElementById("fecha").textContent = `.: ${formatearFecha(fecha)} :.`;
+
+        document.getElementById("numeroComponente").addEventListener("input", async function () {
+            const numero = this.value.trim();
+            const datosDiv = document.getElementById("datosComponente");
+            console.log(numero); // Verificar el valor ingresado
+            if (numero === "") {
+                datosDiv.textContent = "Ingrese un número de componente.";
+                return;
+            }
+
+            // Buscar el componente por key en el nodo componentes
+            const componentesRef = ref(database, "componentes");
+            const consultaComponente = query(componentesRef, orderByChild("nroComponente"), equalTo(numero));
+            get(consultaComponente)
+                .then(snapshot => {
+                    if (snapshot.exists()) {
+                        snapshot.forEach(childSnapshot => {
+                            const componente = childSnapshot.val();
+                            // Mostrar los datos del componente en el modal
+                            datosDiv.innerHTML = `
+                                <strong>Nombre:</strong> ${componente.nombre || "N/A"}<br>
+                                <strong>Marca:</strong> ${componente.marca || "N/A"}<br>
+                                <strong>Estado:</strong> ${componente.estado || "N/A"}
+                            `;
+                        });
+                    } else {
+                        datosDiv.textContent = "No se encontró el componente.";
+                    }
+                })
+                .catch(error => {
+                    console.error("Error al buscar componente:", error);
+                    datosDiv.textContent = "Error al buscar componente.";
+                });
+        });
+
+
+        document.getElementById("btnGuardarPrestamo").addEventListener("click", async function () {
+            const fecha = sessionStorage.getItem("fecha");
+            const materia = sessionStorage.getItem("materia");
+            const ci = sessionStorage.getItem("ci");
+            const nroComponente = document.getElementById("numeroComponente").value.trim();
+
+            if (!fecha || !materia || !ci || !nroComponente) {
+                alert("Completa todos los campos antes de guardar.");
+                return;
+            }
+
+            // Guardar el préstamo en Firebase
+            const prestamosRef = ref(database, "prestamos");
+            const nuevoPrestamo = {
+                fecha: fecha,
+                materia: materia,
+                ci: ci,
+                nroComponente: nroComponente
+            };
+
+            try {
+                await push(prestamosRef, nuevoPrestamo);
+                alert("Préstamo guardado correctamente.");
+
+                // Limpiar el modal
+                document.getElementById("numeroComponente").value = "";
+                document.getElementById("datosComponente").textContent = "";
+                document.getElementById("imagenComponente").innerHTML = "";
+
+                // Opcional: cerrar el modal si usas Flowbite o similar
+                // document.querySelector('[data-modal-toggle="crud-modal"]').click();
+            } catch (error) {
+                console.error("Error al guardar el préstamo:", error);
+                alert("Error al guardar el préstamo.");
+            }
+        });
+
+
+
+
+
+
         document.getElementById("busqueda").addEventListener("input", async function () {
             const usuariosRef = ref(database, "usuarios");
             let filtro = this.value.toUpperCase();
@@ -496,201 +608,6 @@
             }
         });
 
-        //Genera el reporte del archivo en Excel de la materia 
-        document.getElementById("btnGenerarExcel").addEventListener("click", async function () {
-            // 1️⃣ Configurar los parámetros (ajusta según tu caso)
-            const database = getDatabase(app); // Asegúrate de inicializar Firebase
-            const fecha = params.get("fecha"); // Ejemplo de fecha
-            const materia = params.get("horario"); // Ejemplo de materia
-
-            // 2️⃣ Obtener los datos de Firebase (Esperamos el resultado con await)
-            const data = await obtenerAsistentesJSON(database, fecha, materia);
-            console.log(data);
-
-            if (data.length === 0) {
-                alert("No hay asistentes registrados.");
-                return;
-            }
-
-            const horariosRef = ref(database, `horarios/${materia}`);
-            //creamos la consulta para obtener los horarios
-            let docente = "", horaI = "", horaF = "";
-            try {
-                const snapshot = await get(horariosRef);
-
-                if (snapshot.exists()) {
-                    const datos = snapshot.val();
-                    console.log("Asistencia encontrada:", datos);
-                    docente = datos.idProfesor;
-                    horaI = datos.horaI;
-                    horaF = datos.horaF;
-                } else {
-                    console.log(`No se encontró asistencia con el índice ${materia}`);
-                }
-            } catch (error) {
-                console.error("Error al obtener la asistencia:", error);
-            }
-
-
-
-            const workbook = new ExcelJS.Workbook();
-            const worksheet = workbook.addWorksheet("Clase 1");
-
-            // 🔹 Fusionar celdas para el título principal
-            worksheet.mergeCells("A1:H1");
-            worksheet.getCell("B1").value = "LABORATORIO DE ELECTRONICA";
-            worksheet.getCell("B1").alignment = { horizontal: "center", vertical: "middle" };
-            worksheet.getCell("B1").font = {
-                bold: true,             // Negrita
-                color: { argb: "FFFFFF" }, // Color de fuente blanco
-                size: 14               // Tamaño de fuente opcional
-            };
-
-            worksheet.getCell("B1").fill = {
-                type: "pattern",
-                pattern: "solid",
-                fgColor: { argb: "FF585858" } // Color de fondo negro
-            };
-
-            // 🔹 Subtítulo
-            worksheet.mergeCells("B2:H2");
-            worksheet.getCell("B2").value = "UNIDAD: CAPITÁN RAVELO";
-            worksheet.getCell("B2").alignment = { horizontal: "center", vertical: "middle" };
-            worksheet.getCell("B2").font = { bold: true, size: 14 };
-
-            // Datos del encargado
-            worksheet.getCell("B3").value = "Nombre del Encargado:";
-            worksheet.mergeCells("C3:G3");
-            worksheet.getCell("C3").value = "JAVIER HENRY QUISPE PINTO";
-            worksheet.getCell("C3").alignment = { horizontal: "center" };
-            worksheet.getCell("C3").font = { bold: true };
-
-            //Datos de la materia y carrera
-            worksheet.getCell("B4").value = "Materia:";
-            worksheet.mergeCells("C4:E4");
-            worksheet.getCell("C4").value = nombreMateria.toUpperCase();
-            worksheet.getCell("C4").alignment = { horizontal: "center" };
-            worksheet.getCell("C4").font = { bold: true };
-            worksheet.getCell("F4").value = "Carrera:";
-            worksheet.mergeCells("G4:H4");
-            worksheet.getCell("G4").value = "INGENIERIA ELECTRONICA";
-            worksheet.getCell("G4").alignment = { horizontal: "center" };
-            worksheet.getCell("G4").font = { bold: true };
-            // 🔹 Docente y horario
-            worksheet.getCell("B5").value = "Nombre de Docente:";
-            worksheet.mergeCells("C5:H5");
-            worksheet.getCell("C5").value = docente.toUpperCase();;
-            worksheet.getCell("C5").alignment = { horizontal: "center" };
-            worksheet.getCell("C5").font = { bold: true };
-            worksheet.getCell("D3").font = { bold: true };
-
-            // Turno y horario
-            worksheet.getCell("B6").value = "Turno: NOCHE";
-            worksheet.getCell("C6").value = "Hora:";
-            worksheet.getCell("D6").value = horaI;
-            worksheet.getCell("D6").font = { bold: true };
-            worksheet.getCell("E6").value = "HASTA";
-            worksheet.getCell("F6").value = horaF;
-            worksheet.getCell("F6").font = { bold: true };
-            worksheet.mergeCells("A7:A8");
-            worksheet.getCell("A7").value = "Nro.";
-            worksheet.mergeCells("B7:B8");
-            worksheet.getCell("B7").value = "Nombre Completo";
-            worksheet.mergeCells("C7:D8");
-            worksheet.getCell("C7").value = "CI";
-            worksheet.mergeCells("E7:G7");
-            worksheet.getCell("E7").value = "Documento presentado";
-            worksheet.getCell("E8").value = "CI";
-            worksheet.getCell("F8").value = "Boleta";
-            worksheet.getCell("G8").value = "Credencial";
-            worksheet.mergeCells("H7:H8");
-            worksheet.getCell("H7").value = "Observacion";
-
-            // 🔹 Aplicar formato a la fila de encabezados
-            worksheet.getRow(7).eachCell((cell, colNumber) => {
-                cell.font = { bold: true, color: { argb: "FFFFFFFF" } };
-                cell.fill = { type: "pattern", pattern: "solid", fgColor: { argb: "FFA6A6A6" } }; // Gris
-                cell.alignment = { horizontal: "center", vertical: "middle" };
-                cell.border = {
-                    top: { style: "thin" },
-                    left: { style: "thin" },
-                    bottom: { style: "thin" },
-                    right: { style: "thin" }
-                };
-
-
-            });
-            worksheet.getRow(8).eachCell((cell, colNumber) => {
-                cell.font = { bold: true, color: { argb: "FFFFFFFF" } };
-                cell.fill = { type: "pattern", pattern: "solid", fgColor: { argb: "FFA6A6A6" } }; // Gris
-                cell.alignment = { horizontal: "center", vertical: "middle" };
-                cell.border = {
-                    top: { style: "thin" },
-                    left: { style: "thin" },
-                    bottom: { style: "thin" },
-                    right: { style: "thin" }
-                };
-
-                // Ajustar el ancho de columnas según el contenido
-                const columnWidths = [11, 35, 12, 6, 9, 9, 9, 20];
-                worksheet.getColumn(colNumber).width = columnWidths[colNumber - 1];
-            });
-
-            data.forEach((row, index) => {
-                const rowIndex = index + 9; // Fila donde comenzarán los datos
-                const currentRow = worksheet.getRow(rowIndex);
-
-                // 🔹 Insertar datos celda por celda para evitar problemas con .values
-                currentRow.getCell(1).value = index + 1; // Número
-                currentRow.getCell(1).alignment = { horizontal: "center", vertical: "middle" };
-                currentRow.getCell(2).value = row.nombres + " " + row.apellidos; // Nombre completo
-                currentRow.getCell(2).alignment = { vertical: "middle" };
-                currentRow.getCell(3).value = row.ci; // CI
-                currentRow.getCell(3).alignment = { horizontal: "center", vertical: "middle" };
-                currentRow.getCell(4).value = ""; // Documento vacío
-                currentRow.getCell(4).alignment = { vertical: "middle" };
-                currentRow.getCell(5).value = "✔"; // Documento presentado (Ejemplo)
-                currentRow.getCell(5).alignment = { horizontal: "center", vertical: "middle" };
-                currentRow.getCell(6).value = ""; // Boleta vacía
-                currentRow.getCell(7).value = ""; // Credencial vacía
-                currentRow.getCell(8).value = ""; // Observación vacía
-
-                // 🔹 Aplicar relleno a cada celda de la fila
-                currentRow.eachCell((cell) => {
-                    cell.fill = {
-                        type: "pattern",
-                        pattern: "solid",
-                        fgColor: { argb: "FFF2F2F2" } // Gris claro
-                    };
-                    cell.border = {
-                        top: { style: "thin" },
-                        left: { style: "thin" },
-                        bottom: { style: "thin" },
-                        right: { style: "thin" }
-                    };
-                });
-
-                // 🔹 Ajustar altura de la fila (opcional)
-                currentRow.height = 25;
-            });
-
-            // 🔹 Aplicar bordes a todas las celdas
-            worksheet.eachRow((row) => {
-                row.eachCell((cell) => {
-                    cell.border = {
-                        top: { style: "thin" },
-                        left: { style: "thin" },
-                        bottom: { style: "thin" },
-                        right: { style: "thin" }
-                    };
-
-                });
-            });
-
-            // 🔹 Descargar archivo
-            const buffer = await workbook.xlsx.writeBuffer();
-            saveAs(new Blob([buffer], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" }), "" + fecha + " " + horaI + "-CR-JAVIER QUISPE.xlsx");
-        });
 
         // Función para obtener json
         async function obtenerAsistentesJSON(database, fecha, materia) {
