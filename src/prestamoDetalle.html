@@ -106,7 +106,7 @@
                     <td colspan="3">
                         <div id="nombre"
                             class="inline-flex items-center px-5 py-2.5 text-sm font-medium text-center text-green-700 border border-green-700 rounded-lg focus:ring-4 focus:outline-none focus:ring-green-300 bg-white">
-                            .: Jaimito Eduardo Escalante Dominguez - Gestion 2025 :.
+                            .: Nombre del estudiante - Gestion 2025 :.
                         </div>
                     </td>
                     <td></td>
@@ -115,10 +115,20 @@
                 <tr>
                     <td>Materia: </td>
                     <td>
-                        <div id="materia"
-                            class="inline-flex items-center px-5 py-2.5 text-sm font-medium text-center text-green-700 border border-green-700 rounded-lg  focus:ring-4 focus:outline-none focus:ring-green-300 bg-white">
-                            .: Sistemas de control y laboratorio :.
-                        </div>
+                        <a id="materia" href="#" onclick="irADetalleAsistencia()"
+                            class="inline-flex items-center px-5 py-2.5 text-sm font-medium text-center text-green-700 border border-green-700 rounded-lg focus:ring-4 focus:outline-none focus:ring-green-300 bg-white hover:underline cursor-pointer">
+                            .: Nombre de la materia :.
+                        </a>
+                        <script>
+                            function irADetalleAsistencia() {
+                                // Recuperar variables de sessionStorage
+                                const fecha = sessionStorage.getItem("fecha");
+                                const horario = sessionStorage.getItem("materia");
+                                const nombreMateria = document.getElementById("materia").textContent.trim();
+                                // Redirigir con parámetros por URL
+                                window.location.href = `detalleasistencia.html?fecha=${encodeURIComponent(fecha)}&horario=${encodeURIComponent(horario)}&nombreMateria=${encodeURIComponent(nombreMateria)}`;
+                            }
+                        </script>
                     </td>
                     <td>Fecha: </td>
                     <td>
