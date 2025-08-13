@@ -8,11 +8,22 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <title>.: Prestamo :.</title>
+    <style>
+        .fondo {
+            position: fixed;
+            inset: 0px;
+            z-index: 0;
+            background-image: url('assets/patron2.avif');
+            background-repeat: repeat;
+            opacity: 0.2;
+            pointer-events: none;
+        }
+    </style>
 
 </head>
 
 <body>
-    <div class="fixed inset-0 z-0 bg-[url('/src/assets/patron2.avif')] bg-repeat pointer-events-none opacity-20">
+    <div class="fondo">
     </div>
     <!-- ...existing code... -->
     <nav class="relative z-10 border-gray-200 dark:bg-gray-900">
