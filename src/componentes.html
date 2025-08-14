@@ -29,18 +29,27 @@
     <div class="relative z-10 p-10">
         <div class="flex flex-row justify-between">
             <div
-                class="inline-flex items-center px-5 py-2.5 text-sm font-medium text-center text-white bg-green-700 rounded-lg  focus:ring-4 focus:outline-none focus:ring-green-300 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">
+                class="inline-flex items-center px-5 py-2.5 text-sm font-medium text-center text-white bg-slate-700 rounded-lg  focus:ring-4 focus:outline-none focus:ring-slate-300">
                 .: Listado de componentes - 2025 :.
             </div>
 
             <!-- Modal toggle -->
-            <button data-modal-target="crud-modal" data-modal-toggle="crud-modal"
-                class="block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-                type="button"><i class='bx bx-plus'></i>
-                Registrar componente
-            </button>
+            <div class="flex items-center justify-end w-1/2 gap-1 ">
+                <input type="text" placeholder="Buscar componente"
+                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:border-none p-2.5 w-1/3">
+                <button
+                    class="text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">
+                    Descargar excel
+                </button>
+                <button data-modal-target="crud-modal" data-modal-toggle="crud-modal"
+                    class=" text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                    type="button"><i class='bx bx-plus'></i>
+                    Registrar componente
+                </button>
+            </div>
         </div>
-        <div class="relative mt-10 overflow-x-auto shadow-md sm:rounded-lg">
+        <div
+            class="relative flex flex-wrap justify-center gap-2 p-4 mt-10 overflow-x-auto shadow-md grid-cols sm:rounded-lg">
             <table id="tablaUsuarios"
                 class="w-full text-sm text-left text-gray-500 bg-white rtl:text-right dark:text-gray-400">
                 <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
@@ -73,9 +82,40 @@
                     <tr>
                         <td colspan="7" class="py-3 text-center">🚫 No hay datos sobre componentes</td>
                     </tr>
-
                 </tbody>
             </table>
+            <div class="relative bg-white border rounded shadow w-60 h-fit card border-slate-400">
+                <img src="assets/patron4.jpg" alt="" class="object-cover w-full h-40 rounded-t">
+                <div class="w-full h-auto p-2 titulo">
+                    <h1
+                        class="w-full overflow-hidden text-lg font-semibold text-gray-800 whitespace-nowrap text-ellipsis">
+                        Fuente de
+                        energia
+                        del laboratorio
+                        de ciencias economicas</h1>
+                    <p class="text-sm text-gray-600">Marca: INNEIN</p>
+                    <p class="text-sm text-gray-600">Cantidad: 1</p>
+                    <p class="absolute top-0 left-0 px-2 py-1 text-xs text-white bg-green-600 rounded w-fit">FUNCIONAL
+                    </p>
+                </div>
+            </div>
+            <div class="relative bg-white border rounded shadow w-60 h-fit card border-slate-400">
+                <img src="assets/patron4.jpg" alt="" class="object-cover w-full h-40 rounded-t">
+                <div class="w-full h-auto p-2 titulo">
+                    <h1
+                        class="w-full overflow-hidden text-lg font-semibold text-gray-800 whitespace-nowrap text-ellipsis">
+                        Multimetro digital
+                        del laboratorio
+                        de ciencias economicas</h1>
+                    <p class="text-sm text-gray-600">Marca: INNEIN</p>
+                    <p class="text-sm text-gray-600">Cantidad: 1</p>
+                    <p class="absolute top-0 left-0 px-2 py-1 text-xs text-white bg-red-600 rounded w-fit">FUNCIONAL
+                    </p>
+                </div>
+            </div>
+
+
+
         </div>
 
 
