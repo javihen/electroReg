@@ -8,14 +8,25 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <link href="https://cdn.jsdelivr.net/npm/flowbite@3.1.1/dist/flowbite.min.css" rel="stylesheet" />
+    <style>
+        .fondo {
+            background-image: url('assets/patron2.avif');
+            background-repeat: repeat;
+            width: 100%;
+            height: 100vh;
+            position: fixed;
+            z-index: 0;
+            opacity: 0.2;
+        }
+    </style>
 </head>
 
 <body>
-
+    <div class="fondo"></div>
     <div data-include="header.html"></div>
     <script src="includeheader.js"></script>
-    
-    <div class="p-10">
+
+    <div class="relative z-10 p-10">
         <div class="flex flex-row justify-between">
             <div
                 class="inline-flex items-center px-5 py-2.5 text-sm font-medium text-center text-white bg-green-700 rounded-lg  focus:ring-4 focus:outline-none focus:ring-green-300 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">
@@ -30,7 +41,8 @@
             </button>
         </div>
         <div class="relative mt-10 overflow-x-auto shadow-md sm:rounded-lg">
-            <table id="tablaUsuarios" class="w-full text-sm text-left text-gray-500 rtl:text-right dark:text-gray-400">
+            <table id="tablaUsuarios"
+                class="w-full text-sm text-left text-gray-500 bg-white rtl:text-right dark:text-gray-400">
                 <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                     <tr class="text-center">
                         <th scope="col" class="px-6 py-3">
@@ -68,7 +80,7 @@
 
 
     </div>
-    <footer class="m-4 bg-white rounded-lg shadow-sm dark:bg-gray-900">
+    <footer class="relative z-10 m-4 rounded-lg shadow-sm dark:bg-gray-900">
         <div class="w-full max-w-screen-xl p-4 mx-auto md:py-8">
             <div class="sm:flex sm:items-center sm:justify-between">
                 <a href="https://flowbite.com/" class="flex items-center mb-4 space-x-3 sm:mb-0 rtl:space-x-reverse">
@@ -308,7 +320,7 @@
     </div>
 
 
-    
+
     <script src="https://cdn.jsdelivr.net/npm/flowbite@3.1.1/dist/flowbite.min.js"></script>
     <script src="../node_modules/flowbite/dist/flowbite.min.js"></script>
 
