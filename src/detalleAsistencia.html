@@ -834,6 +834,8 @@
                     }
                 });
 
+                listaUsuarios.sort((a, b) => a.apellidos.localeCompare(b.apellidos)); // Ordenar por apellidos
+
                 console.log("✅ Lista de asistentes:", listaUsuarios);
 
                 // 5️⃣ Llamar la función para mostrar la tabla
