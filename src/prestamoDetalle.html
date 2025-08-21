@@ -302,6 +302,14 @@
                     </div>
 
                     <div class="grid grid-cols-2 gap-4 mb-4">
+                        <div class="col-span-2 ">
+                            <input type=" text" name="" id="observacion"
+                                placeholder="Si no conoce el numero digite la descripcion"
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5">
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-4 mb-4">
                         <div id="datosComponente" class="mt-2 text-sm"></div>
                         <div id="imagenComponente">
                             <img src="assets/patron4.jpg" class="" alt="">
@@ -447,8 +455,9 @@
             const materia = sessionStorage.getItem("materia");
             const ci = sessionStorage.getItem("ci");
             const nroComponente = document.getElementById("numeroComponente").value.trim();
+            const observacion = document.getElementById("observacion").value.trim();
 
-            if (!fecha || !materia || !ci || !nroComponente) {
+            if (!fecha || !materia || !ci) {
                 alert("Completa todos los campos antes de guardar.");
                 return;
             }
@@ -459,7 +468,8 @@
                 fecha: fecha,
                 materia: materia,
                 ci: ci,
-                nroComponente: nroComponente
+                nroComponente: nroComponente,
+                observacion: observacion
             };
 
             try {
@@ -470,6 +480,7 @@
                 document.getElementById("numeroComponente").value = "";
                 document.getElementById("datosComponente").textContent = "";
                 document.getElementById("imagenComponente").innerHTML = "";
+                document.getElementById("observacion").value = "";
 
                 mostrarPrestamosUsuario();
 
@@ -516,12 +527,13 @@
             for (const prestamoKey in snapshot.val()) {
                 const p = snapshot.val()[prestamoKey];
                 if (p.ci === ci && p.fecha === fecha && p.materia === materia) {
+                    console.log("Préstamo:", p);
                     // Buscar el componente por nroComponente
                     const componentesRef = ref(database, "componentes");
                     const consultaComponente = query(componentesRef, orderByChild("nroComponente"), equalTo(p.nroComponente));
                     const snapComp = await get(consultaComponente);
 
-                    let nombre = "N/A", marca = "N/A", estado = "N/A", nro = "N/A";
+                    let nombre = p.observacion, marca = "N/A", estado = "N/A", nro = "N/A";
                     if (snapComp.exists()) {
                         snapComp.forEach(childComp => {
                             const comp = childComp.val();
@@ -535,7 +547,7 @@
                     tablaBody.innerHTML += `
                         <tr class="text-center border border-t-slate-500 ">
                             <td class="py-4">${nro}</td>
-                            <td>${nombre}</td>
+                            <td>${nombre} </td>
                             <td>${marca}</td>
                             <td>
                                 <span class="bg-${estado === "Prestado" ? "red" : "green"}-100 text-${estado === "Prestado" ? "red" : "green"}-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded-sm border border-${estado === "Prestado" ? "red" : "green"}-400">${estado}</span>

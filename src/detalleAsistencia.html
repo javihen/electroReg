@@ -703,7 +703,7 @@
                 worksheet.mergeCells(rowIdx, 5, rowIdx, 8);
 
                 // Poner todo el contenido junto
-                worksheet.getCell(rowIdx, 5).value = ` ${comp.nombre || ""} - ${comp.marca || ""}`;
+                worksheet.getCell(rowIdx, 5).value = ` ${comp.nombre || ""} - ${comp.marca || ""} - ${prestamo.observacion || ""} `;
 
                 // Centrar el texto
                 worksheet.getCell(rowIdx, 5).alignment = { horizontal: 'left', vertical: 'middle', wrapText: true };
