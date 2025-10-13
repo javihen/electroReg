@@ -8,14 +8,85 @@
     <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/main.min.js"></script>
     <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.19/index.global.min.js'></script>
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js"></script>
 </head>
 
 <body class="bg-gray-100 p-6">
     <div id="calendar" class="max-w-6xl mx-auto bg-white shadow-lg rounded-lg p-4"></div>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
+    <script type="module">
+        // Configuración de Firebase
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getDatabase, ref, get } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyC_Yl50SusdST7Gqal5UBahp97Y-5iqMzE",
+            authDomain: "electroreg-40fdf.firebaseapp.com",
+            databaseURL: "https://electroreg-40fdf-default-rtdb.firebaseio.com",
+            projectId: "electroreg-40fdf",
+            storageBucket: "electroreg-40fdf.appspot.com",
+            messagingSenderId: "28054683949",
+            appId: "1:28054683949:web:08fdd0d53b9e2feb3153a4"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const database = getDatabase(app);
+
+        // Función para obtener asistencias y convertirlas en eventos
+        async function obtenerEventosAsistencias() {
+            const asistenciasRef = ref(database, "asistencias");
+            const horariosRef = ref(database, "horarios");
+            const snapshot = await get(asistenciasRef);
+            const horariosSnap = await get(horariosRef);
+            const eventos = [];
+            const combinaciones = new Set();
+
+            // Guardar los nombres de materia en un diccionario para acceso rápido
+            const nombresMaterias = {};
+            if (horariosSnap.exists()) {
+                Object.entries(horariosSnap.val()).forEach(([id, datos]) => {
+                    nombresMaterias[id] = datos.materia || id;
+                });
+            }
+
+            if (snapshot.exists()) {
+                snapshot.forEach(child => {
+                    const asistencia = child.val();
+                    const fecha = asistencia.fecha;
+                    const idMateria = asistencia.idMateria;
+                    if (!fecha || !idMateria) return;
+
+                    // Clave única por fecha e idMateria
+                    const clave = `${fecha}_${idMateria}`;
+                    if (combinaciones.has(clave)) return; // Ya existe, no agregar
+
+                    combinaciones.add(clave);
+
+                    // Obtener nombre de la materia desde horarios
+                    const nombreMateria = nombresMaterias[idMateria] || idMateria;
+
+                    eventos.push({
+                        title: nombreMateria,
+                        start: fecha, // Debe estar en formato YYYY-MM-DD
+                        backgroundColor: '#3b82f6',
+                        borderColor: '#3b82f6',
+                        extendedProps: {
+                            idMateria: idMateria,
+                            fecha: fecha,
+                            nombreMateria: nombreMateria
+                        }
+                    });
+                });
+            }
+            return eventos;
+        }
+
+        document.addEventListener('DOMContentLoaded', async function () {
             const calendarEl = document.getElementById('calendar');
+            const eventos = await obtenerEventosAsistencias();
+
             const calendar = new FullCalendar.Calendar(calendarEl, {
                 initialView: 'dayGridMonth',
                 headerToolbar: {
@@ -23,36 +94,21 @@
                     center: 'title',
                     right: 'timeGridDay'
                 },
-                events: [
-                    {
-                        title: 'Reunión con equipo',
-                        start: '2025-10-12T10:00:00',
-                        end: '2025-10-12T11:00:00',
-                        backgroundColor: '#3b82f6', // Tailwind blue-500
-                        borderColor: '#3b82f6',
-                        extendedProps: {
-                            description: 'Revisar avances del sprint'
-                        }
-                    },
-                    {
-                        title: 'Entrega de proyecto',
-                        start: '2025-10-15',
-                        backgroundColor: '#10b981', // Tailwind green-500
-                        borderColor: '#10b981'
-                    }
-                ],
+                events: eventos,
                 eventDidMount: function (info) {
                     // Personaliza la tarjeta con Tailwind
                     const tooltip = document.createElement('div');
-                    tooltip.innerHTML = `<div class="p-2 bg-white rounded shadow text-sm">
-            <p><strong>${info.event.title}</strong></p>
-            <p>${info.event.extendedProps.description || ''}</p>
-          </div>`;
-                    info.el.addEventListener('mouseenter', () => {
+                    tooltip.innerHTML = `<div class="p-2 bg-white rounded shadow text-sm whitespace-normal wrap-break-word">
+                        <p><strong>${info.event.title}</strong></p>
+                        <p>${info.event.extendedProps.descripcion || ''}</p>
+                        <p>CI: ${info.event.extendedProps.ci || ''}</p>
+                        <p>Materia: ${info.event.extendedProps.materia || ''}</p>
+                    </div>`;
+                    info.el.addEventListener('mouseenter', (e) => {
                         document.body.appendChild(tooltip);
                         tooltip.style.position = 'absolute';
-                        tooltip.style.left = info.jsEvent?.pageX + 'px';
-                        tooltip.style.top = info.jsEvent?.pageY + 'px';
+                        tooltip.style.left = (e.pageX || 0) + 'px';
+                        tooltip.style.top = (e.pageY || 0) + 'px';
                     });
                     info.el.addEventListener('mouseleave', () => tooltip.remove());
                 }
