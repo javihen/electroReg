@@ -23,7 +23,7 @@
     </style>
 </head>
 
-<body class="bg-gray-100 p-6">
+<body class="p-6 bg-gray-100">
     <div class="fondo"></div>
     <nav class="relative z-10 border-gray-200 dark:bg-gray-900">
         <div class="flex flex-wrap items-center justify-between max-w-screen-xl p-4 mx-auto">
@@ -81,7 +81,7 @@
             </div>
             <div class="items-center justify-between hidden w-full md:flex md:w-auto md:order-1" id="navbar-user">
                 <ul
-                    class="flex flex-col p-4 mt-4 font-medium border border-gray-100 rounded-lg md:p-0  md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0  dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700">
+                    class="flex flex-col p-4 mt-4 font-medium border border-gray-100 rounded-lg md:p-0 md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0 dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700">
                     <li>
                         <a href="panel.html"
                             class="block px-3 py-2 text-white bg-blue-700 rounded-sm md:bg-transparent md:text-blue-700 md:p-0 "
@@ -108,7 +108,7 @@
         </div>
     </nav>
 
-    <div id="calendar" class="max-w-6xl mx-auto bg-white shadow-lg rounded-lg p-4"></div>
+    <div id="calendar" class="max-w-6xl p-4 mx-auto bg-white rounded-lg shadow-lg"></div>
 
     <script type="module">
         // Configuración de Firebase
@@ -196,13 +196,13 @@
                     const idMateria = info.event.extendedProps.idMateria;
                     const nombreMateria = info.event.extendedProps.nombreMateria;
                     // Redirigir a la URL deseada
-                    window.location.href = `/src/detalleAsistencia.html?fecha=${encodeURIComponent(fecha)}&horario=${encodeURIComponent(idMateria)}&nombreMateria=${encodeURIComponent(nombreMateria)}`;
+                    window.location.href = `./src/detalleAsistencia.html?fecha=${encodeURIComponent(fecha)}&horario=${encodeURIComponent(idMateria)}&nombreMateria=${encodeURIComponent(nombreMateria)}`;
                     //window.location.href = `/detalleAsistencia.html?fecha=${encodeURIComponent(fecha)}&idMateria=${encodeURIComponent(idMateria)}`;
                     // Puedes cambiar la ruta "/detalleAsistencia.html" por la que necesites
                 },
                 eventContent: function (arg) {
                     return {
-                        html: `<div class="whitespace-pre-line cursor-pointer px-2 py-1 rounded bg-blue-100 text-blue-800 font-semibold text-sm shadow">${arg.event.title}</div>`
+                        html: `<div class="px-2 py-1 text-sm font-semibold text-blue-800 whitespace-pre-line bg-blue-100 rounded shadow cursor-pointer">${arg.event.title}</div>`
                     };
                 }
 
