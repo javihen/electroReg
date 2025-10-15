@@ -301,9 +301,10 @@
         const fecha = params.get("fecha");
         const horario = params.get("horario");
         const nombreMateria = params.get("nombreMateria");
+        const tipo = params.get("tipo");
 
         document.getElementById('tituloNombre').innerHTML = ".: " + nombreMateria + " - Gestion 2025:.";
-        document.getElementById('fecha').innerHTML = "" + formatearFecha(fecha) + " ";
+        document.getElementById('fecha').innerHTML = "" + formatearFecha(fecha) + " " + tipo;
 
         console.log("Fecha:", fecha);
         console.log("Horario:", horario);
@@ -448,10 +449,12 @@
             const database = getDatabase(app); // Asegúrate de inicializar Firebase
             const fecha = params.get("fecha"); // Ejemplo de fecha
             const materia = params.get("horario"); // Ejemplo de materia
+            const tipo = params.get("tipo"); // Ejemplo de tipo
+
 
             // 2️⃣ Obtener los datos de Firebase (Esperamos el resultado con await)
             const data = await obtenerAsistentesJSON(database, fecha, materia);
-            console.log(data);
+            //console.log(data);
 
             if (data.length === 0) {
                 alert("No hay asistentes registrados.");
@@ -730,7 +733,11 @@
 
             // 🔹 Descargar archivo
             const buffer = await workbook.xlsx.writeBuffer();
-            saveAs(new Blob([buffer], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" }), "" + fecha + " " + horaI + "-JJP-JAVIER QUISPE.xlsx");
+            if (tipo != "PRESENCIAL") {
+                saveAs(new Blob([buffer], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" }), "" + fecha + " " + horaI + "-JJP-JAVIER QUISPE-" + tipo + ".xlsx");
+            } else {
+                saveAs(new Blob([buffer], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" }), "" + fecha + " " + horaI + "-JJP-JAVIER QUISPE.xlsx");
+            }
         });
 
         // Función para obtener json
@@ -836,7 +843,7 @@
 
                 listaUsuarios.sort((a, b) => a.apellidos.localeCompare(b.apellidos)); // Ordenar por apellidos
 
-                console.log("✅ Lista de asistentes:", listaUsuarios);
+                //console.log("✅ Lista de asistentes:", listaUsuarios);
 
                 // 5️⃣ Llamar la función para mostrar la tabla
                 mostrarTabla(listaUsuarios);

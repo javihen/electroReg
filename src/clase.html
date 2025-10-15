@@ -549,29 +549,42 @@
                     if (snapshot.exists()) {
                         const asistencias = snapshot.val();
                         const fechas = new Set();
+                        const fechasAgregadas = new Set();
+                        const registros = [];
 
                         // Recorremos las asistencias y agregamos las fechas únicas para ese idhorario
                         for (const key in asistencias) {
-                            const { fecha, idMateria } = asistencias[key];
-                            /* console.log(`fecha: ${fecha}, idhorario: ${idMateria}`); */
-                            if (idMateria === idhorarios) {
-                                fechas.add(fecha);  // Solo agregar las fechas para el idhorario correspondiente
+                            const { fecha, idMateria, tipo } = asistencias[key];
+                            //console.log(`fecha: ${fecha}, idhorario: ${idMateria}`);
+                            if (idMateria === idhorarios && !fechasAgregadas.has(fecha)) {
+                                registros.push({ fecha, tipo });
+                                fechasAgregadas.add(fecha);  // Solo agregar las fechas para el idhorario correspondiente
                             }
+                            //console.log(registros)
                         }
-                        const fechasOrdenadas = Array.from(fechas).sort((a, b) => new Date(a) - new Date(b));
-
+                        //const fechasOrdenadas = Array.from(fechas).sort((a, b) => new Date(a) - new Date(b));
+                        registros.sort((a, b) => new Date(a.fecha) - new Date(b.fecha));
                         // Mostrar las fechas únicas en la tabla
                         let contador = 1;
                         let filasHTML = '';
-                        fechasOrdenadas.forEach((fechas, index) => {
-                            // Creamos la fila como una cadena de texto en formato HTML
-
+                        registros.forEach(({ fecha, tipo }) => {
+                            if (tipo === "PRESENCIAL") {
+                                tipo = "PRESENCIAL";
+                            } else if (tipo === "VIRTUAL") {
+                                tipo = "VIRTUAL";
+                            } else if (tipo === "FERIADO") {
+                                tipo = "FERIADO";
+                            } else if (tipo === "SUSPENDIDO") {
+                                tipo = "SUSPENDIDO";
+                            } else {
+                                tipo = "PRESENCIAL";
+                            }
                             filasHTML += `
                             <tr class="bg-white border-b border-gray-200 ">
                                 <td class="px-6 py-4"> ${contador} </td>
-                                <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap ">${formatearFecha(fechas)}</td>
+                                <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap ">${formatearFecha(fecha)} - ${tipo}</td>
                                 <td class="px-6 py-4">
-                                    <button type="button" id="btnMostrar" data-fecha="${fechas}" data-horario="${idhorarios}" data-nombre="${nombreMateria}"
+                                    <button type="button" id="btnMostrar" data-tipo="${tipo}" data-fecha="${fecha}" data-horario="${idhorarios}" data-nombre="${nombreMateria}"
                                             class="btnMostrar text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-full text-sm px-5 py-2.5 me-2 mb-2 ">
                                         <i class='bx bx-show-alt'></i> Ver Asistentes
                                     </button>
@@ -598,11 +611,13 @@
                                 const fecha = btn.getAttribute("data-fecha");
                                 const horario = btn.getAttribute("data-horario");
                                 const nombreMateria = btn.getAttribute("data-nombre");
+                                const tipo = btn.getAttribute("data-tipo");
 
                                 console.log("✅ Botón clickeado");
                                 console.log("📅 Fecha:", fecha);
                                 console.log("⏰ Horario:", horario);
                                 console.log("⏰ Materia:", nombreMateria);
+                                console.log("⏰ Tipo:", tipo);
 
                                 if (!fecha || !horario) {
                                     console.error("❌ ERROR: Los valores de fecha u horario están vacíos.");
@@ -610,7 +625,7 @@
                                 }
 
                                 // Redirigir con parámetros en la URL
-                                window.location.href = `detalleAsistencia.html?fecha=${encodeURIComponent(fecha)}&horario=${encodeURIComponent(horario)}&nombreMateria=${encodeURIComponent(nombreMateria)}`;
+                                window.location.href = `detalleAsistencia.html?fecha=${encodeURIComponent(fecha)}&horario=${encodeURIComponent(horario)}&nombreMateria=${encodeURIComponent(nombreMateria)}&tipo=${encodeURIComponent(tipo)}`;
                             }
                         });
 
