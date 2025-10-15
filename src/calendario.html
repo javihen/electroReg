@@ -81,7 +81,7 @@
             </div>
             <div class="items-center justify-between hidden w-full md:flex md:w-auto md:order-1" id="navbar-user">
                 <ul
-                    class="flex flex-col p-4 mt-4 font-medium border border-gray-100 rounded-lg md:p-0 bg-gray-50 md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0 md:bg-white dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700">
+                    class="flex flex-col p-4 mt-4 font-medium border border-gray-100 rounded-lg md:p-0  md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0  dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700">
                     <li>
                         <a href="panel.html"
                             class="block px-3 py-2 text-white bg-blue-700 rounded-sm md:bg-transparent md:text-blue-700 md:p-0 "
@@ -107,6 +107,7 @@
             </div>
         </div>
     </nav>
+
     <div id="calendar" class="max-w-6xl mx-auto bg-white shadow-lg rounded-lg p-4"></div>
 
     <script type="module">
@@ -193,8 +194,10 @@
                     // Obtener fecha e idMateria del evento
                     const fecha = info.event.extendedProps.fecha;
                     const idMateria = info.event.extendedProps.idMateria;
+                    const nombreMateria = info.event.extendedProps.nombreMateria;
                     // Redirigir a la URL deseada
-                    window.location.href = `/detalleAsistencia.html?fecha=${encodeURIComponent(fecha)}&idMateria=${encodeURIComponent(idMateria)}`;
+                    window.location.href = `/src/detalleAsistencia.html?fecha=${encodeURIComponent(fecha)}&horario=${encodeURIComponent(idMateria)}&nombreMateria=${encodeURIComponent(nombreMateria)}`;
+                    //window.location.href = `/detalleAsistencia.html?fecha=${encodeURIComponent(fecha)}&idMateria=${encodeURIComponent(idMateria)}`;
                     // Puedes cambiar la ruta "/detalleAsistencia.html" por la que necesites
                 },
                 eventContent: function (arg) {
