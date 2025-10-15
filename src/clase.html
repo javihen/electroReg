@@ -113,11 +113,7 @@
             </div>
 
             <!-- Modal toggle -->
-            <button data-modal-target="register-modal" data-modal-toggle="register-modal"
-                class="block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center "
-                type="button">
-                Nuevo registro
-            </button>
+
             <button data-modal-target="crud-modal" data-modal-toggle="crud-modal"
                 class="block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center "
                 type="button">
@@ -299,13 +295,22 @@
                         <div class="col-span-2 ">
                             <input type="date" name="fecha" id="fecha" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 
                                 placeholder=" ">
+                            <select id=" tipoClase"
+                                class=" mt-3 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5">
+                            <option value="">-- Tipo de clase --</option>
+                            <option value="PRESENCIAL">Presencial</option>
+                            <option value="VIRTUAL">Virtual</option>
+                            <option value="FERIADO">Feriado</option>
+                            <option value="SUSPENDIDO">Suspendido</option>
+                            </select>
                         </div>
 
-                        <hr class=" mb-4 ">
+                        <hr class="mb-4 ">
 
-                        <div class=" col-span-2 ">
-                                <input type=" text" name="busqueda" id="busqueda" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 
+                        <div class="col-span-2 ">
+                            <input type=" text" name="busqueda" id="busqueda" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 
                                 placeholder=" Apellidos o CI">
+
                         </div>
                     </div>
                     <div class="">
@@ -334,67 +339,7 @@
     </div>
 
     <!-- Modal para registrar -->
-    <div id="register-modal" tabindex="-1" aria-hidden="true"
-        class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
-        <div class="relative w-full max-w-md max-h-full p-4">
-            <!-- Modal content -->
-            <div class="relative bg-white rounded-lg shadow-sm ">
-                <!-- Modal header -->
-                <div class="flex items-center justify-between p-4 border-b border-gray-200 rounded-t md:p-5 ">
-                    <h3 class="text-lg font-semibold text-gray-900 ">
-                        Agregar clase
-                    </h3>
-                    <button type="button"
-                        class="inline-flex items-center justify-center w-8 h-8 text-sm text-gray-400 bg-transparent rounded-lg hover:bg-gray-200 hover:text-gray-900 ms-auto "
-                        data-modal-toggle="register-modal">
-                        <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
-                            viewBox="0 0 14 14">
-                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
-                        </svg>
-                        <span class="sr-only">Close modal</span>
-                    </button>
-                </div>
-                <!-- Modal body -->
-                <form class="p-4 md:p-5">
-                    <div class="grid grid-cols-2 gap-4 mb-4">
-                        <div class="col-span-2 ">
-                            <input type="date" name="fecha" id="fecha"
-                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 ">
-                            <select name="" id=""
-                                class=" mt-3 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5">
-                                <option value="">-- Tipo de clase --</option>
-                                <option value="">Presencial</option>
-                                <option value="">Virtual</option>
-                            </select>
-                        </div>
-                        <hr>
-                    </div>
-                    <button class="bg-[#1E40AF] text-white w-full p-2.5 rounded-lg">Registrar</button>
-                    <!-- <div class="">
-                        <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
-                            <table class="w-full text-sm text-left text-gray-500 rtl:text-right ">
-                                <thead class="text-xs text-gray-700 uppercase bg-gray-50 ">
-                                    <tr>
-                                        <th scope="col" class="px-6 py-3">
-                                            Estudiante
-                                        </th>
 
-
-                                    </tr>
-                                </thead>
-                                <tbody id="tablaUsuarios">
-                                    <tr class="bg-white border-b border-gray-200 hover:bg-gray-50 ">
-
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div> -->
-                </form>
-            </div>
-        </div>
-    </div>
 
 
 
@@ -512,18 +457,37 @@
                     tablaUsuarios.innerHTML = `<tr class="bg-white border-b border-gray-200"><td class="px-6 py-4 text-right" colspan="2">No se encontraron usuarios</td></tr>`;
                 }
             }
+            // ------------ REGISTRAR UNA CLASE SEA VIRTUAL O PRESENCIAL -----------//
+            window.capturarClase = function (boton) {
 
+                const fechaClase = document.getElementById("fechaClase").value;
+                const tipoClase = document.getElementById("tipoClase").value;
+                const idHorario = sessionStorage.getItem("idHorario");
+                if (tipoClase === "" || fechaClase === "") {
+                    Swal.fire({
+                        title: "Debe completar todos los campos!",
+                        icon: "warning",
+                        draggable: true
+                    });
+                    return;
+                } else {
+                    registrarAsistencia(0, tipoClase, fechaClase, idHorario);
+                }
+
+            }
             //------------- REGISTRAR LA ASISTENCIA -------------//
             window.capturarAsistencia = function (boton) {
 
                 const ci = boton.getAttribute("data-ci");
                 const fechaSeleccionada = document.getElementById("fecha").value;
+                const tipoClase = document.getElementById(" tipoClase").value;
                 const idHorario = sessionStorage.getItem("idHorario");
-                registrarAsistencia(ci, fechaSeleccionada, idHorario);
+
+                registrarAsistencia(ci, tipoClase, fechaSeleccionada, idHorario);
             }
 
 
-            async function registrarAsistencia(ci, fecha, idHorario) {
+            async function registrarAsistencia(ci, tipo, fecha, idHorario) {
                 const db = getDatabase();  // Obtener la base de datos
                 const asistenciaRef = ref(db, 'asistencias');  // Referencia a la colección "asistencias"
 
@@ -532,6 +496,7 @@
                     ci: ci,
                     fecha: fecha,
                     idMateria: idHorario,
+                    tipo: tipo
                 };
                 const consulta = query(asistenciaRef, orderByChild("ci"), equalTo(ci));
                 const snapshot = await get(consulta);
@@ -659,7 +624,7 @@
             }
 
             //-------------- FUNCION AGREGAR ASISTENCIAS ---------------//
-            document.getElementById("btnAsistencia").addEventListener("click", function () {
+            /* document.getElementById("btnAsistencia").addEventListener("click", function () {
                 const datoRecibido = sessionStorage.getItem("idHorario");
                 const fecha = new Date();
                 const fechaFormateada = fecha.toLocaleDateString("es-ES"); // Formato DD/MM/AAAA
@@ -685,7 +650,7 @@
                     });
                 alert(datoRecibido + " " + fechaFormateada);
             });
-
+ */
             //---------- LISTAR USUARIOS DE LA ASISTENCIA EN FECHA ------------//
             document.addEventListener("click", function (event) {
                 if (event.target.closest(".btnMostrar")) {
